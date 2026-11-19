@@ -225,7 +225,7 @@ nav a:hover{
 }
 
 #fire{
-  mix-blend-mode:screen;
+ mix-blend-mode: normal;
   pointer-events:none;
 }
 
