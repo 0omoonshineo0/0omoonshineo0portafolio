@@ -24,7 +24,7 @@ if (conMouse && !sinMovimiento) {
 
   const VIOLETA = [139, 92, 255], CIAN = [39, 194, 238];
   const COL = [[139, 92, 255], [205, 188, 255], [39, 194, 238], [255, 255, 255]];
-  const N = 26;                                   // largo de la cola
+  const N = 20;                                   // largo de la cola
   const m = { x: -200, y: -200, vx: 0, vy: 0, ok: false, hover: 0 };
   const cola = Array.from({ length: N }, () => ({ x: -200, y: -200 }));
   const aura = { x: -200, y: -200, r: 26 };
