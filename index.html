@@ -218,3 +218,43 @@
 <script src="script.js"></script>
 </body>
 </html>
+</section>
+
+<!-- ============ REPRODUCTOR MUSICAL ============ -->
+<div class="moon-player">
+
+  <audio
+    id="moonshineAudio"
+    src="media/The Endless River.mp3"
+    preload="auto"
+    loop>
+  </audio>
+
+  <div class="music-info">
+    <span class="music-label">MOONSHINE · SOUNDTRACK</span>
+    <span class="music-title">The Endless River</span>
+  </div>
+
+  <button id="musicToggle" type="button" aria-label="Reproducir música">▶</button>
+
+  <input
+    id="musicProgress"
+    class="music-progress"
+    type="range"
+    min="0"
+    max="100"
+    value="0">
+
+  <input
+    id="musicVolume"
+    class="music-volume"
+    type="range"
+    min="0"
+    max="1"
+    step="0.01"
+    value="0.08">
+
+</div>
+
+<footer>✦ MoonShine ✦</footer>
+<script src="script.js"></script>
