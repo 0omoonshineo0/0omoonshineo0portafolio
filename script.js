@@ -27,7 +27,8 @@ document.querySelectorAll('.vid').forEach(v => {
 
 
 
-/* ===== REVELACIÓN CÓSMICA DE PORTADA ===== */
+
+/* ===== REVELACIÓN CÓSMICA CON VAPOR Y POLVO ESTELAR ===== */
 
 if(!sinMovimiento){
 
@@ -44,13 +45,14 @@ if(!sinMovimiento){
   let w,h;
   let corriendo = false;
 
-  let luces = [];
   let particulas = [];
 
   let lx = -999;
   let ly = -999;
 
   const d = Math.min(devicePixelRatio || 1,1.5);
+
+  /* ===== FOTOGRAFÍA ===== */
 
   function foto(){
 
@@ -66,8 +68,8 @@ if(!sinMovimiento){
 
       a.drawImage(
         img,
-        (w - iw) / 2,
-        (h - ih) / 2,
+        (w-iw)/2,
+        (h-ih)/2,
         iw,
         ih
       );
@@ -86,20 +88,65 @@ if(!sinMovimiento){
 
   }
 
+  /* ===== CAPA DE VAPOR MATE ===== */
+
+  function vapor(){
+
+    a.globalCompositeOperation = 'source-over';
+
+    const base = a.createLinearGradient(0,0,w,h);
+
+    base.addColorStop(0,'rgba(185,181,198,.97)');
+    base.addColorStop(.45,'rgba(139,137,157,.96)');
+    base.addColorStop(1,'rgba(91,88,111,.97)');
+
+    a.fillStyle = base;
+    a.fillRect(0,0,w,h);
+
+    /* Nubes suaves de vidrio esmerilado */
+
+    for(let i=0;i<22;i++){
+
+      const x = Math.random()*w;
+      const y = Math.random()*h;
+      const r = 35 + Math.random()*100;
+
+      const nube = a.createRadialGradient(
+        x,y,0,
+        x,y,r
+      );
+
+      nube.addColorStop(0,'rgba(235,230,245,.19)');
+      nube.addColorStop(.5,'rgba(205,195,222,.09)');
+      nube.addColorStop(1,'rgba(205,195,222,0)');
+
+      a.fillStyle = nube;
+
+      a.beginPath();
+      a.arc(x,y,r,0,Math.PI*2);
+      a.fill();
+
+    }
+
+  }
+
   function ajustar(){
 
     w = caja.clientWidth;
     h = caja.clientHeight;
 
     [A,B].forEach(c => {
-      c.width = w * d;
-      c.height = h * d;
+
+      c.width = w*d;
+      c.height = h*d;
+
     });
 
     a.setTransform(d,0,0,d,0,0);
     b.setTransform(d,0,0,d,0,0);
 
     foto();
+    vapor();
 
   }
 
@@ -114,28 +161,71 @@ if(!sinMovimiento){
 
   addEventListener('resize',ajustar);
 
-  function destello(px,py){
+  /* ===== CONSUMIR EL VAPOR ===== */
 
-    luces.push({
-      x:px,
-      y:py,
-      radio:0,
-      vida:1100,
-      t:performance.now()
-    });
+  function consumir(px,py,intensidad=1){
 
-    for(let i=0;i<9;i++){
+    a.save();
+
+    a.globalCompositeOperation = 'destination-out';
+
+    const cantidad = Math.round(5 + intensidad*9);
+
+    for(let i=0;i<cantidad;i++){
+
+      const angulo = Math.random()*Math.PI*2;
+      const distancia = Math.random()*intensidad*30;
+
+      const x = px + Math.cos(angulo)*distancia;
+      const y = py + Math.sin(angulo)*distancia;
+
+      const radio = 10 + Math.random()*intensidad*20;
+
+      const forma = a.createRadialGradient(
+        x,y,0,
+        x,y,radio
+      );
+
+      forma.addColorStop(0,'rgba(0,0,0,.95)');
+      forma.addColorStop(.45,'rgba(0,0,0,.75)');
+      forma.addColorStop(1,'rgba(0,0,0,0)');
+
+      a.fillStyle = forma;
+
+      a.beginPath();
+      a.arc(x,y,radio,0,Math.PI*2);
+      a.fill();
+
+    }
+
+    a.restore();
+
+  }
+
+  /* ===== POLVO ESTELAR ===== */
+
+  function emitir(px,py,cantidad=12){
+
+    const tamanos = [.5,1,2];
+
+    for(let i=0;i<cantidad;i++){
+
+      const angulo = Math.random()*Math.PI*2;
+      const velocidad = .15 + Math.random()*1.1;
 
       particulas.push({
 
-        x:px,
-        y:py,
+        x:px + (Math.random()-.5)*30,
+        y:py + (Math.random()-.5)*30,
 
-        vx:(Math.random()-.5)*1.8,
-        vy:(Math.random()-.5)*1.8,
+        vx:Math.cos(angulo)*velocidad,
+        vy:Math.sin(angulo)*velocidad,
 
-        size:1 + Math.random()*2.2,
-        vida:500 + Math.random()*500,
+        size:tamanos[Math.random()*tamanos.length|0],
+
+        estrella:Math.random() < .35,
+
+        vida:650 + Math.random()*650,
         t:performance.now()
 
       });
@@ -151,46 +241,35 @@ if(!sinMovimiento){
 
   }
 
+  /* ===== ESTRELLAS DE CUATRO PUNTAS ===== */
+
+  function dibujarEstrella(x,y,tamano){
+
+    b.beginPath();
+
+    b.moveTo(x,y-tamano*2);
+    b.quadraticCurveTo(x+.35*tamano,y-.35*tamano,x+tamano*2,y);
+
+    b.quadraticCurveTo(x+.35*tamano,y+.35*tamano,x,y+tamano*2);
+
+    b.quadraticCurveTo(x-.35*tamano,y+.35*tamano,x-tamano*2,y);
+
+    b.quadraticCurveTo(x-.35*tamano,y-.35*tamano,x,y-tamano*2);
+
+    b.closePath();
+    b.fill();
+
+  }
+
+  /* ===== ANIMACIÓN DE PARTÍCULAS ===== */
+
   function cuadro(ahora){
 
-    a.clearRect(0,0,w,h);
-    foto();
-
     b.clearRect(0,0,w,h);
-
-    luces = luces.filter(
-      l => ahora-l.t < l.vida
-    );
 
     particulas = particulas.filter(
       p => ahora-p.t < p.vida
     );
-
-    luces.forEach(l => {
-
-      const tiempo = (ahora-l.t)/l.vida;
-
-      l.radio = 12 + tiempo*24;
-
-      const opacidad = 1-tiempo;
-
-      const gradiente = b.createRadialGradient(
-        l.x,l.y,0,
-        l.x,l.y,l.radio
-      );
-
-      gradiente.addColorStop(0,`rgba(255,255,255,${opacidad*.9})`);
-      gradiente.addColorStop(.25,`rgba(205,180,255,${opacidad*.55})`);
-      gradiente.addColorStop(.65,`rgba(139,92,255,${opacidad*.2})`);
-      gradiente.addColorStop(1,'rgba(139,92,255,0)');
-
-      b.fillStyle = gradiente;
-
-      b.beginPath();
-      b.arc(l.x,l.y,l.radio,0,Math.PI*2);
-      b.fill();
-
-    });
 
     particulas.forEach(p => {
 
@@ -200,21 +279,37 @@ if(!sinMovimiento){
       p.x += p.vx;
       p.y += p.vy;
 
-      b.globalAlpha = opacidad;
-      b.fillStyle = '#e9e6ff';
-      b.shadowColor = '#a78bfa';
-      b.shadowBlur = 12;
+      p.vx *= .985;
+      p.vy *= .985;
 
-      b.beginPath();
-      b.arc(p.x,p.y,p.size,0,Math.PI*2);
-      b.fill();
+      b.globalAlpha = opacidad;
+
+      b.fillStyle = '#eeeaff';
+      b.shadowColor = '#c9b8ff';
+      b.shadowBlur = 5;
+
+      if(p.estrella){
+
+        dibujarEstrella(
+          p.x,
+          p.y,
+          p.size
+        );
+
+      }else{
+
+        b.beginPath();
+        b.arc(p.x,p.y,p.size,0,Math.PI*2);
+        b.fill();
+
+      }
 
     });
 
     b.globalAlpha = 1;
     b.shadowBlur = 0;
 
-    if(luces.length || particulas.length){
+    if(particulas.length){
 
       requestAnimationFrame(cuadro);
 
@@ -227,6 +322,8 @@ if(!sinMovimiento){
 
   }
 
+  /* ===== MOVIMIENTO DEL CURSOR ===== */
+
   const mover = (cx,cy) => {
 
     const r = caja.getBoundingClientRect();
@@ -234,12 +331,13 @@ if(!sinMovimiento){
     const px = cx-r.left;
     const py = cy-r.top;
 
-    if(Math.hypot(px-lx,py-ly)>16){
+    if(Math.hypot(px-lx,py-ly)>12){
 
       lx = px;
       ly = py;
 
-      destello(px,py);
+      consumir(px,py,.8);
+      emitir(px,py,12);
 
     }
 
@@ -253,16 +351,21 @@ if(!sinMovimiento){
 
   });
 
+  /* ===== EXPLOSIÓN SUAVE AL HACER CLIC ===== */
+
   caja.addEventListener('pointerdown',e => {
 
     const r = caja.getBoundingClientRect();
 
-    destello(
-      e.clientX-r.left,
-      e.clientY-r.top
-    );
+    const px = e.clientX-r.left;
+    const py = e.clientY-r.top;
+
+    consumir(px,py,2.5);
+    emitir(px,py,55);
 
   });
+
+  /* ===== INTERACCIÓN TÁCTIL ===== */
 
   caja.addEventListener('touchmove',e => {
 
@@ -273,7 +376,20 @@ if(!sinMovimiento){
 
   },{passive:true});
 
+  caja.addEventListener('touchstart',e => {
+
+    const r = caja.getBoundingClientRect();
+
+    const px = e.touches[0].clientX-r.left;
+    const py = e.touches[0].clientY-r.top;
+
+    consumir(px,py,2.5);
+    emitir(px,py,55);
+
+  },{passive:true});
+
 }
+
 /* ===== ROSTRO CÓSMICO INTERACTIVO ===== */
 
 (() => {
