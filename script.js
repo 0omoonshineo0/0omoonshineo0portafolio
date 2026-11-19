@@ -163,7 +163,7 @@ if(!sinMovimiento){
 
   img.onerror = () => dibujarFoto();
 
-  img.src = 'media/portada.jpg';
+ img.src = 'media/LUUZ-1 (1).jpg';
 
   addEventListener('resize',ajustar);
 
