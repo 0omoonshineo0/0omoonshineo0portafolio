@@ -88,7 +88,7 @@ if (conMouse && !sinMovimiento) {
       const k = 1 - (now - s.t) / s.L;
       s.x += s.vx; s.y += s.vy; s.vx *= .985; s.vy = s.vy * .985 - .004;
       x.fillStyle = `rgba(${s.c},${k * (.6 + .4 * Math.sin(now / 80 + s.ph))})`;
-      if (s.r > 0) estrella(s.x, s.y, s.r * 2.2 * k + 1, now / 700 + s.ph);
+      if (s.r > 0) estrella(s.x, s.y, s.r * 3.3 * k + 1, now / 700 + s.ph);
       else { x.beginPath(); x.arc(s.x, s.y, s.r * k + .4, 0, 6.283); x.fill(); }
     });
 
