@@ -1294,3 +1294,166 @@ if(photoCards.length && lightbox){
   restartPhotoTimer();
 
 }
+
+
+
+/* =====================================================
+   PARTÍCULAS AMBIENTALES INDEPENDIENTES
+   Capa propia para todo MoonShine
+===================================================== */
+
+(() => {
+
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+
+  canvas.id = 'ambientParticles';
+
+  Object.assign(canvas.style, {
+    position: 'fixed',
+    inset: '0',
+    width: '100%',
+    height: '100%',
+    pointerEvents: 'none',
+    zIndex: '0',
+    opacity: '1'
+  });
+
+  document.body.appendChild(canvas);
+
+  let W = 0;
+  let H = 0;
+  let dpr = 1;
+
+  const particles = [];
+  const MAX_PARTICLES = 95;
+
+
+  /* ===== AJUSTAR TAMAÑO ===== */
+
+  function resize(){
+
+    W = window.innerWidth;
+    H = window.innerHeight;
+
+    dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
+    canvas.width = W * dpr;
+    canvas.height = H * dpr;
+
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+  }
+
+
+  /* ===== CREAR PARTÍCULAS ===== */
+
+  function createParticle(){
+
+    const angle = Math.random() * Math.PI * 2;
+    const speed = .12 + Math.random() * .28;
+
+    return {
+
+      x: Math.random() * W,
+      y: Math.random() * H,
+
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+
+      size: .5 + Math.random() * 1.3,
+
+      alpha: .15 + Math.random() * .38,
+
+      phase: Math.random() * Math.PI * 2,
+
+      drift: .15 + Math.random() * .35
+
+    };
+
+  }
+
+
+  /* ===== POBLACIÓN INICIAL ===== */
+
+  for(let i = 0; i < MAX_PARTICLES; i++){
+    particles.push(createParticle());
+  }
+
+
+  /* ===== ANIMACIÓN ===== */
+
+  let lastTime = 0;
+
+  function animate(now){
+
+    const dt = Math.min(
+      2,
+      (now - (lastTime || now)) / 16.67 || 1
+    );
+
+    lastTime = now;
+
+    ctx.clearRect(0, 0, W, H);
+
+    for(const p of particles){
+
+      /* Movimiento independiente */
+
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+
+      /* Leve movimiento orgánico */
+
+      p.x += Math.sin(now * .0003 + p.phase) * p.drift * .025;
+      p.y += Math.cos(now * .00025 + p.phase) * p.drift * .025;
+
+
+      /* Reaparecer al salir de pantalla */
+
+      if(
+        p.x < -10 || p.x > W + 10 ||
+        p.y < -10 || p.y > H + 10
+      ){
+
+        Object.assign(p, createParticle());
+
+      }
+
+
+      /* Brillo sutil */
+
+      const shimmer =
+        .65 + Math.sin(now * .001 + p.phase) * .35;
+
+      ctx.globalAlpha = p.alpha * shimmer;
+
+      ctx.fillStyle = '#e5dcff';
+
+      ctx.shadowColor = '#bda7ff';
+      ctx.shadowBlur = 5;
+
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+      ctx.fill();
+
+    }
+
+    ctx.globalAlpha = 1;
+    ctx.shadowBlur = 0;
+
+    requestAnimationFrame(animate);
+
+  }
+
+
+  window.addEventListener('resize', resize);
+
+  resize();
+
+  requestAnimationFrame(animate);
+
+})();
+
