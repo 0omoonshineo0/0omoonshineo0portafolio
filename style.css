@@ -923,3 +923,134 @@ nav{
 @media(max-width:800px){
   #cosmicFace{opacity:.9;}
 }
+
+/* =====================================================
+   REPRODUCTOR MUSICAL MOONSHINE
+===================================================== */
+
+.moon-player{
+  position:relative;
+  z-index:2;
+  width:min(680px, 88%);
+  margin:0 auto;
+  padding:22px 0 30px;
+  display:grid;
+  grid-template-columns:auto 38px 1fr 90px;
+  align-items:center;
+  gap:18px;
+  border-top:1px solid rgba(205,188,255,.13);
+}
+
+.music-info{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  min-width:0;
+}
+
+.music-label{
+  font:400 .58rem var(--sans);
+  letter-spacing:.2em;
+  color:var(--lila);
+  opacity:.65;
+}
+
+.music-title{
+  font:300 .85rem var(--sans);
+  letter-spacing:.08em;
+  color:var(--plata);
+  white-space:nowrap;
+}
+
+#musicToggle{
+  width:34px;
+  height:34px;
+  border:1px solid rgba(205,188,255,.3);
+  border-radius:50%;
+  background:rgba(139,92,255,.08);
+  color:var(--lila);
+  font-size:.8rem;
+  cursor:pointer;
+  transition:.3s ease;
+}
+
+#musicToggle:hover{
+  background:rgba(139,92,255,.2);
+  box-shadow:0 0 16px rgba(139,92,255,.3);
+}
+
+.music-progress,
+.music-volume{
+  appearance:none;
+  -webkit-appearance:none;
+  height:2px;
+  border-radius:10px;
+  outline:none;
+  cursor:pointer;
+}
+
+.music-progress{
+  width:100%;
+  background:linear-gradient(
+    to right,
+    var(--lila) 0 var(--progress, 0%),
+    rgba(205,188,255,.18) var(--progress, 0%) 100%
+  );
+  box-shadow:0 0 7px rgba(205,188,255,.25);
+}
+
+.music-volume{
+  width:100%;
+  background:linear-gradient(
+    to right,
+    var(--lila) 0 var(--volume, 8%),
+    rgba(205,188,255,.18) var(--volume, 8%) 100%
+  );
+}
+
+.music-progress::-webkit-slider-thumb,
+.music-volume::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 8px var(--lila);
+}
+
+.music-progress::-moz-range-thumb,
+.music-volume::-moz-range-thumb{
+  width:7px;
+  height:7px;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 8px var(--lila);
+}
+
+@media(max-width:600px){
+
+  .moon-player{
+    width:88%;
+    grid-template-columns:34px 1fr 65px;
+    gap:12px;
+  }
+
+  .music-info{
+    grid-column:1 / -1;
+    margin-bottom:5px;
+  }
+
+  #musicToggle{
+    grid-column:1;
+  }
+
+  .music-progress{
+    grid-column:2;
+  }
+
+  .music-volume{
+    grid-column:3;
+  }
+
+}
