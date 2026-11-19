@@ -25,10 +25,6 @@ document.querySelectorAll('.vid').forEach(v => {
 
 });
 
-
-
-
-
 /* ===== REVELACIÓN CÓSMICA: VAPOR GLASS MATE ===== */
 
 if(!sinMovimiento){
@@ -42,9 +38,8 @@ if(!sinMovimiento){
 
   const img = new Image();
 
-  let listo = false;
   let w,h;
-  let corriendo = false;
+  let listo = false;
 
   let particulas = [];
   let zonas = [];
@@ -52,24 +47,59 @@ if(!sinMovimiento){
   let lx = -999;
   let ly = -999;
 
-  let despejadoHasta = 0;
+  let corriendo = false;
   let ultimoTiempo = 0;
+
+  let despejeTotal = false;
+  let tiempoClick = 0;
+  let opacidadVapor = 1;
 
   const d = Math.min(devicePixelRatio || 1,1.5);
 
+  /* ===== MÁSCARA DE REVELACIÓN ===== */
+
+  const M = document.createElement('canvas');
+  const m = M.getContext('2d');
+
+  function ajustar(){
+
+    w = caja.clientWidth;
+    h = caja.clientHeight;
+
+    [A,B,M].forEach(c => {
+      c.width = w*d;
+      c.height = h*d;
+    });
+
+    a.setTransform(d,0,0,d,0,0);
+    b.setTransform(d,0,0,d,0,0);
+    m.setTransform(d,0,0,d,0,0);
+
+    dibujarFoto();
+    dibujarVapor();
+
+    m.clearRect(0,0,w,h);
+
+    zonas = [];
+    opacidadVapor = 1;
+
+  }
+
   /* ===== FOTOGRAFÍA ===== */
 
-  function foto(){
+  function dibujarFoto(){
+
+    a.clearRect(0,0,w,h);
 
     if(listo){
 
-      const s = Math.max(
+      const escala = Math.max(
         w/img.width,
         h/img.height
       );
 
-      const iw = img.width*s;
-      const ih = img.height*s;
+      const iw = img.width*escala;
+      const ih = img.height*escala;
 
       a.drawImage(
         img,
@@ -88,7 +118,7 @@ if(!sinMovimiento){
 
   }
 
-  /* ===== VAPOR GLASS MATE ===== */
+  /* ===== VAPOR NEGRO GLASS MATE ===== */
 
   function dibujarVapor(){
 
@@ -96,28 +126,22 @@ if(!sinMovimiento){
 
     a.globalCompositeOperation = 'source-over';
 
-    const base = a.createLinearGradient(0,0,w,h);
-
-    base.addColorStop(0,'rgba(0,0,0,.99)');
-    base.addColorStop(.5,'rgba(12,10,19,.98)');
-    base.addColorStop(1,'rgba(0,0,0,.99)');
-
-    a.fillStyle = base;
+    a.fillStyle = '#030205';
     a.fillRect(0,0,w,h);
 
-    for(let i=0;i<28;i++){
+    for(let i=0;i<35;i++){
 
       const x = (i*137.5)%w;
       const y = (i*83.7)%h;
-      const r = 35+(i%5)*19;
+      const r = 35+(i%5)*22;
 
       const nube = a.createRadialGradient(
         x,y,0,
         x,y,r
       );
 
-      nube.addColorStop(0,'rgba(165,158,183,.10)');
-      nube.addColorStop(.55,'rgba(120,113,139,.055)');
+      nube.addColorStop(0,'rgba(180,170,200,.12)');
+      nube.addColorStop(.5,'rgba(130,120,155,.07)');
       nube.addColorStop(1,'rgba(100,90,120,0)');
 
       a.fillStyle = nube;
@@ -132,94 +156,76 @@ if(!sinMovimiento){
 
   }
 
-  /* ===== AJUSTAR CANVAS ===== */
-
-  function ajustar(){
-
-    w = caja.clientWidth;
-    h = caja.clientHeight;
-
-    [A,B].forEach(c => {
-
-      c.width = w*d;
-      c.height = h*d;
-
-    });
-
-    a.setTransform(d,0,0,d,0,0);
-    b.setTransform(d,0,0,d,0,0);
-
-    foto();
-    dibujarVapor();
-
-  }
-
   img.onload = () => {
     listo = true;
-    ajustar();
+    dibujarFoto();
   };
 
-  img.onerror = () => ajustar();
+  img.onerror = () => dibujarFoto();
 
   img.src = 'media/portada.jpg';
 
   addEventListener('resize',ajustar);
 
-  /* ===== ZONAS DE DESPEJE ===== */
+  /* ===== DESPEJAR LA MÁSCARA ===== */
 
-  function despejar(px,py,intensidad=1){
+  function despejar(px,py,fuerza=1){
 
-    zonas.push({
+    const radio = 25+Math.random()*12;
 
-      x:px,
-      y:py,
+    m.save();
+    m.globalCompositeOperation = 'source-over';
 
-      radio:0,
-      maxRadio:45*intensidad,
+    const gradiente = m.createRadialGradient(
+      px,py,radio*.12,
+      px,py,radio
+    );
 
-      fuerza:1,
-      t:performance.now()
+    gradiente.addColorStop(0,'rgba(255,255,255,1)');
+    gradiente.addColorStop(.55,'rgba(255,255,255,.95)');
+    gradiente.addColorStop(.82,'rgba(255,255,255,.55)');
+    gradiente.addColorStop(1,'rgba(255,255,255,0)');
 
-    });
+    m.fillStyle = gradiente;
+
+    m.beginPath();
+    m.arc(px,py,radio,0,Math.PI*2);
+    m.fill();
+
+    m.restore();
 
   }
 
-  /* ===== PARTÍCULAS ===== */
+  /* ===== POLVO ESTELAR ===== */
 
-  function emitir(px,py,cantidad=12){
+  function emitir(px,py,cantidad=15){
 
     const tamanos = [.5,1,2];
 
     for(let i=0;i<cantidad;i++){
 
       const angulo = Math.random()*Math.PI*2;
-      const velocidad = .15+Math.random()*1;
+      const velocidad = .25+Math.random()*1.2;
 
       particulas.push({
 
-        x:px+(Math.random()-.5)*25,
-        y:py+(Math.random()-.5)*25,
+        x:px+(Math.random()-.5)*34,
+        y:py+(Math.random()-.5)*34,
 
         vx:Math.cos(angulo)*velocidad,
         vy:Math.sin(angulo)*velocidad,
 
-        size:tamanos[Math.random()*tamanos.length|0],
+        size:tamanos[Math.random()*3|0],
+        estrella:Math.random()<.4,
 
-        estrella:Math.random()<.35,
-
-        vida:650+Math.random()*650,
+        vida:850+Math.random()*850,
         t:performance.now()
 
       });
 
     }
 
-    if(!corriendo){
-
-      corriendo = true;
-      requestAnimationFrame(cuadro);
-
-    }
+    iniciarAnimacion();
 
   }
 
@@ -230,88 +236,22 @@ if(!sinMovimiento){
     b.beginPath();
 
     b.moveTo(x,y-s*2);
-    b.quadraticCurveTo(x+s*.3,y-s*.3,x+s*2,y);
+    b.quadraticCurveTo(x+s*.25,y-s*.25,x+s*2,y);
 
-    b.quadraticCurveTo(x+s*.3,y+s*.3,x,y+s*2);
+    b.quadraticCurveTo(x+s*.25,y+s*.25,x,y+s*2);
 
-    b.quadraticCurveTo(x-s*.3,y+s*.3,x-s*2,y);
+    b.quadraticCurveTo(x-s*.25,y+s*.25,x-s*2,y);
 
-    b.quadraticCurveTo(x-s*.3,y-s*.3,x,y-s*2);
+    b.quadraticCurveTo(x-s*.25,y-s*.25,x,y-s*2);
 
     b.closePath();
     b.fill();
 
   }
 
-  /* ===== ANIMACIÓN PRINCIPAL ===== */
+  /* ===== DIBUJAR PARTÍCULAS ===== */
 
-  function cuadro(ahora){
-
-    const delta = ultimoTiempo
-      ? Math.min(ahora-ultimoTiempo,40)
-      : 16;
-
-    ultimoTiempo = ahora;
-
-    const despejado = ahora < despejadoHasta;
-
-    /* Reconstruir el vapor */
-
-    a.clearRect(0,0,w,h);
-
-    if(!despejado){
-
-      foto();
-      dibujarVapor();
-
-      /* Despeje suave siguiendo el cursor */
-
-      zonas.forEach(z => {
-
-        const edad = ahora-z.t;
-
-        z.radio += delta*.12;
-
-        const opacidad = Math.max(
-          0,
-          1-edad/850
-        );
-
-        a.globalCompositeOperation = 'destination-out';
-
-        const gradiente = a.createRadialGradient(
-          z.x,z.y,0,
-          z.x,z.y,z.radio
-        );
-
-        gradiente.addColorStop(0,`rgba(0,0,0,${opacidad})`);
-        gradiente.addColorStop(.48,`rgba(0,0,0,${opacidad*.85})`);
-        gradiente.addColorStop(.78,`rgba(0,0,0,${opacidad*.35})`);
-        gradiente.addColorStop(1,'rgba(0,0,0,0)');
-
-        a.fillStyle = gradiente;
-
-        a.beginPath();
-        a.arc(z.x,z.y,z.radio,0,Math.PI*2);
-        a.fill();
-
-      });
-
-      a.globalCompositeOperation = 'source-over';
-
-      zonas = zonas.filter(z => ahora-z.t<850);
-
-    }else{
-
-      /* Fotografía totalmente despejada */
-
-      foto();
-
-      zonas = [];
-
-    }
-
-    /* Polvo estelar */
+  function dibujarParticulas(ahora){
 
     b.clearRect(0,0,w,h);
 
@@ -326,13 +266,13 @@ if(!sinMovimiento){
       p.x += p.vx;
       p.y += p.vy;
 
-      p.vx *= .985;
-      p.vy *= .985;
+      p.vx *= .987;
+      p.vy *= .987;
 
       b.globalAlpha = vida;
-      b.fillStyle = '#eeeaff';
-      b.shadowColor = '#c9b8ff';
-      b.shadowBlur = 5;
+      b.fillStyle = '#f1edff';
+      b.shadowColor = '#bca5ff';
+      b.shadowBlur = 7;
 
       if(p.estrella){
 
@@ -351,14 +291,81 @@ if(!sinMovimiento){
     b.globalAlpha = 1;
     b.shadowBlur = 0;
 
-    /* Continuar mientras haya actividad */
+  }
 
-    if(
-      zonas.length ||
-      particulas.length ||
-      despejado ||
-      ahora-despejadoHasta<900
-    ){
+  /* ===== COMPOSICIÓN DEL CUADRO ===== */
+
+  function componer(){
+
+    a.save();
+
+    a.globalCompositeOperation = 'destination-out';
+    a.drawImage(M,0,0,w,h);
+
+    a.restore();
+
+  }
+
+  /* ===== ANIMACIÓN ===== */
+
+  function cuadro(ahora){
+
+    const delta = ultimoTiempo
+      ? Math.min(ahora-ultimoTiempo,40)
+      : 16;
+
+    ultimoTiempo = ahora;
+
+    /* Después del clic, esperar 15 segundos */
+
+    if(despejeTotal && ahora-tiempoClick>=15000){
+
+      despejeTotal = false;
+
+    }
+
+    /* El vapor vuelve lentamente */
+
+    if(!despejeTotal && opacidadVapor<1){
+
+      opacidadVapor = Math.min(
+        1,
+        opacidadVapor+delta/6500
+      );
+
+    }
+
+    if(despejeTotal){
+
+      m.clearRect(0,0,w,h);
+
+    }else{
+
+      /* Recuperar poco a poco la máscara */
+
+      if(opacidadVapor>0){
+
+        m.globalCompositeOperation = 'destination-out';
+        m.fillStyle = `rgba(0,0,0,${Math.min(1,delta/6500)})`;
+        m.fillRect(0,0,w,h);
+        m.globalCompositeOperation = 'source-over';
+
+      }
+
+    }
+
+    /* Reconstruir la capa de vapor */
+
+    dibujarFoto();
+    dibujarVapor();
+    componer();
+
+    dibujarParticulas(ahora);
+
+    const quedanParticulas = particulas.length>0;
+    const debeSeguir = despejeTotal || opacidadVapor<1 || quedanParticulas;
+
+    if(debeSeguir){
 
       requestAnimationFrame(cuadro);
 
@@ -367,65 +374,11 @@ if(!sinMovimiento){
       corriendo = false;
       ultimoTiempo = 0;
 
-      a.clearRect(0,0,w,h);
-      foto();
-      dibujarVapor();
-
-      b.clearRect(0,0,w,h);
-
     }
 
   }
 
-  /* ===== MOVIMIENTO DEL CURSOR ===== */
-
-  const mover = (cx,cy) => {
-
-    const r = caja.getBoundingClientRect();
-
-    const px = cx-r.left;
-    const py = cy-r.top;
-
-    if(Math.hypot(px-lx,py-ly)>7){
-
-      lx = px;
-      ly = py;
-
-      if(performance.now()>=despejadoHasta){
-
-        despejar(px,py,.9);
-        emitir(px,py,8);
-
-      }
-
-      if(!corriendo){
-
-        corriendo = true;
-        requestAnimationFrame(cuadro);
-
-      }
-
-    }
-
-  };
-
-  caja.addEventListener('pointermove',e => {
-
-    if(e.pointerType==='mouse'){
-      mover(e.clientX,e.clientY);
-    }
-
-  });
-
-  /* ===== CLIC: DESPEJE TOTAL POR 15 SEGUNDOS ===== */
-
-  function revelarTodo(px,py){
-
-    despejadoHasta = performance.now()+15000;
-
-    zonas = [];
-
-    emitir(px,py,65);
+  function iniciarAnimacion(){
 
     if(!corriendo){
 
@@ -436,18 +389,75 @@ if(!sinMovimiento){
 
   }
 
-  caja.addEventListener('pointerdown',e => {
+  /* ===== MOVIMIENTO FLUIDO DEL CURSOR ===== */
+
+  function mover(cx,cy){
 
     const r = caja.getBoundingClientRect();
 
-    revelarTodo(
-      e.clientX-r.left,
-      e.clientY-r.top
-    );
+    const px = cx-r.left;
+    const py = cy-r.top;
+
+    const distancia = Math.hypot(px-lx,py-ly);
+
+    if(distancia>1){
+
+      const pasos = Math.max(1,Math.ceil(distancia/5));
+
+      for(let i=0;i<pasos;i++){
+
+        const t = (i+1)/pasos;
+
+        const x = lx+(px-lx)*t;
+        const y = ly+(py-ly)*t;
+
+        despejar(x,y);
+        
+        if(Math.random()<.85){
+          emitir(x,y,2);
+        }
+
+      }
+
+      lx = px;
+      ly = py;
+
+      iniciarAnimacion();
+
+    }
+
+  }
+
+  caja.addEventListener('pointermove',e => {
+
+    if(e.pointerType==='mouse'){
+      mover(e.clientX,e.clientY);
+    }
 
   });
 
-  /* ===== TÁCTIL ===== */
+  /* ===== CLIC: DESPEJAR TODO 15 SEGUNDOS ===== */
+
+  function revelarTodo(){
+
+    despejeTotal = true;
+    tiempoClick = performance.now();
+
+    opacidadVapor = 0;
+
+    m.clearRect(0,0,w,h);
+
+    zonas = [];
+
+    emitir(w/2,h/2,100);
+
+    iniciarAnimacion();
+
+  }
+
+  caja.addEventListener('pointerdown',revelarTodo);
+
+  /* ===== PANTALLAS TÁCTILES ===== */
 
   caja.addEventListener('touchmove',e => {
 
@@ -458,18 +468,12 @@ if(!sinMovimiento){
 
   },{passive:true});
 
-  caja.addEventListener('touchstart',e => {
+  caja.addEventListener('touchstart',revelarTodo,{passive:true});
 
-    const r = caja.getBoundingClientRect();
-
-    revelarTodo(
-      e.touches[0].clientX-r.left,
-      e.touches[0].clientY-r.top
-    );
-
-  },{passive:true});
+  ajustar();
 
 }
+
 
 
 /* ===== ROSTRO CÓSMICO INTERACTIVO ===== */
