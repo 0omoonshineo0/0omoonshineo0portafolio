@@ -13,52 +13,97 @@ document.querySelectorAll('.vid').forEach(v => {
   if (id) v.innerHTML = `<iframe src="https://player.vimeo.com/video/${id}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
 });
 
-/* ===== CURSOR CON ESTELA (ajustes del GlowCursor, en magenta) ===== */
+/* ===== CURSOR MÁGICO: cola fluida, aura suave y destellos ===== */
 if (conMouse && !sinMovimiento) {
   document.body.classList.add('fx');
-  const AJ = { color: '255,31,169', intensity: 1.5, trailWidth: 1, linger: 5, glow: 0.5 };
-  const c = $('#trail'), x = c.getContext('2d'), star = $('#star');
+  const c = $('#trail'), x = c.getContext('2d');
   const dpr = Math.min(devicePixelRatio || 1, 2);
-  const vida = AJ.linger * 110;           // cuánto dura la estela (ms)
-  let W, H, pts = [], chispas = [];
-
-  const medir = () => {
-    W = innerWidth; H = innerHeight;
-    c.width = W * dpr; c.height = H * dpr;
-    x.setTransform(dpr, 0, 0, dpr, 0, 0);
-  };
+  let W, H;
+  const medir = () => { W = innerWidth; H = innerHeight; c.width = W * dpr; c.height = H * dpr; x.setTransform(dpr, 0, 0, dpr, 0, 0); };
   medir(); addEventListener('resize', medir);
 
+  const VIOLETA = [139, 92, 255], CIAN = [39, 194, 238];
+  const COL = [[139, 92, 255], [205, 188, 255], [39, 194, 238], [255, 255, 255]];
+  const N = 26;                                   // largo de la cola
+  const m = { x: -200, y: -200, vx: 0, vy: 0, ok: false, hover: 0 };
+  const cola = Array.from({ length: N }, () => ({ x: -200, y: -200 }));
+  const aura = { x: -200, y: -200, r: 26 };
+  let chispas = [], ondas = [];
+
+  function chispa(px, py, burst) {
+    const a = Math.random() * 6.283, s = burst ? 0.8 + Math.random() * 2.6 : 0.2 + Math.random() * 0.7;
+    chispas.push({ x: px + (Math.random() - .5) * 8, y: py + (Math.random() - .5) * 8, vx: Math.cos(a) * s, vy: Math.sin(a) * s - .25,
+      t: performance.now(), L: 700 + Math.random() * 900, r: 1 + Math.random() * 2.6, c: COL[Math.random() * 4 | 0], ph: Math.random() * 6.283 });
+  }
   addEventListener('pointermove', e => {
-    pts.push({ x: e.clientX, y: e.clientY, t: performance.now() });
-    star.style.transform = `translate(${e.clientX}px,${e.clientY}px)`;
+    m.vx = e.clientX - m.x; m.vy = e.clientY - m.y; m.x = e.clientX; m.y = e.clientY;
+    if (!m.ok) { m.ok = true; cola.forEach(p => { p.x = m.x; p.y = m.y; }); aura.x = m.x; aura.y = m.y; }
+    const n = Math.min(3, Math.hypot(m.vx, m.vy) / 14 | 0);
+    for (let i = 0; i < n; i++) chispa(m.x, m.y);
+    m.hover = e.target.closest && e.target.closest('a') ? 1 : 0;
   });
-  addEventListener('pointerdown', e => {            // explosión al hacer clic
-    for (let i = 0; i < 20; i++) {
-      const a = Math.random() * 6.283, s = 1 + Math.random() * 4;
-      chispas.push({ x: e.clientX, y: e.clientY, vx: Math.cos(a) * s, vy: Math.sin(a) * s, t: performance.now() });
-    }
+  addEventListener('pointerdown', e => {
+    ondas.push({ x: e.clientX, y: e.clientY, t: performance.now() });
+    for (let i = 0; i < 18; i++) chispa(e.clientX, e.clientY, true);
   });
 
-  (function bucle(ahora) {
+  const estrella = (px, py, r, rot) => {
+    x.beginPath();
+    for (let i = 0; i < 8; i++) { const a = rot + i * Math.PI / 4, d = i % 2 ? r * .28 : r; x.lineTo(px + Math.cos(a) * d, py + Math.sin(a) * d); }
+    x.closePath(); x.fill();
+  };
+
+  (function bucle(now) {
     x.clearRect(0, 0, W, H);
-    pts = pts.filter(p => ahora - p.t < vida);
-    x.lineCap = 'round'; x.lineJoin = 'round';
-    x.shadowColor = `rgba(${AJ.color},1)`;
-    x.shadowBlur = 30 * AJ.glow * AJ.intensity;
-    for (let i = 1; i < pts.length; i++) {
-      const k = 1 - (ahora - pts[i].t) / vida;
-      x.strokeStyle = `rgba(${AJ.color},${Math.min(1, k * AJ.intensity)})`;
-      x.lineWidth = (1 + k * 5) * AJ.trailWidth;
-      x.beginPath(); x.moveTo(pts[i - 1].x, pts[i - 1].y); x.lineTo(pts[i].x, pts[i].y); x.stroke();
+    x.globalCompositeOperation = 'lighter';
+    const vel = Math.min(1, Math.hypot(m.vx, m.vy) / 40); m.vx *= .9; m.vy *= .9;
+
+    // cola: cada punto persigue suavemente al anterior (movimiento orgánico)
+    cola[0].x = m.x; cola[0].y = m.y;
+    for (let i = 1; i < N; i++) {
+      const p = cola[i], q = cola[i - 1], k = .34 - i * .004;
+      p.x += (q.x - p.x) * k + Math.sin(now / 260 + i * .7) * .1 * vel * i;
+      p.y += (q.y - p.y) * k + Math.cos(now / 300 + i * .6) * .1 * vel * i;
     }
-    chispas = chispas.filter(s => ahora - s.t < 650);
+    x.lineCap = 'round'; x.shadowColor = 'rgba(139,92,255,.9)'; x.shadowBlur = 14;
+    for (let i = N - 1; i > 0; i--) {
+      const f = i / N, k = Math.pow(1 - f, 1.4);
+      const col = VIOLETA.map((v, j) => v + (CIAN[j] - v) * f | 0);
+      x.strokeStyle = `rgba(${col},${k * .85})`;
+      x.lineWidth = .6 + k * 6 * (.5 + vel * .8);
+      x.beginPath(); x.moveTo(cola[i].x, cola[i].y); x.lineTo(cola[i - 1].x, cola[i - 1].y); x.stroke();
+    }
+    x.shadowBlur = 0;
+
+    // aura suave que sigue con retraso
+    aura.x += (m.x - aura.x) * .16; aura.y += (m.y - aura.y) * .16;
+    aura.r += ((26 + m.hover * 16) - aura.r) * .12;
+    const g = x.createRadialGradient(aura.x, aura.y, 0, aura.x, aura.y, aura.r * 1.8);
+    g.addColorStop(0, 'rgba(205,188,255,.35)'); g.addColorStop(1, 'rgba(139,92,255,0)');
+    x.fillStyle = g; x.beginPath(); x.arc(aura.x, aura.y, aura.r * 1.8, 0, 6.283); x.fill();
+
+    // destellos que flotan y titilan
+    chispas = chispas.filter(s => now - s.t < s.L);
     chispas.forEach(s => {
-      const k = 1 - (ahora - s.t) / 650;
-      s.x += s.vx; s.y += s.vy; s.vx *= .96; s.vy *= .96;
-      x.fillStyle = `rgba(255,${120 + k * 110 | 0},230,${k})`;
-      x.beginPath(); x.arc(s.x, s.y, 1 + k * 2.2, 0, 6.283); x.fill();
+      const k = 1 - (now - s.t) / s.L;
+      s.x += s.vx; s.y += s.vy; s.vx *= .985; s.vy = s.vy * .985 - .004;
+      x.fillStyle = `rgba(${s.c},${k * (.6 + .4 * Math.sin(now / 80 + s.ph))})`;
+      if (s.r > 1.8) estrella(s.x, s.y, s.r * 2.2 * k + 1, now / 700 + s.ph);
+      else { x.beginPath(); x.arc(s.x, s.y, s.r * k + .4, 0, 6.283); x.fill(); }
     });
+
+    // ondas al hacer clic
+    ondas = ondas.filter(o => now - o.t < 700);
+    ondas.forEach(o => {
+      const k = (now - o.t) / 700;
+      x.strokeStyle = `rgba(205,188,255,${1 - k})`; x.lineWidth = 1;
+      x.beginPath(); x.arc(o.x, o.y, 8 + k * 70, 0, 6.283); x.stroke();
+    });
+
+    // punta del cursor: pequeña estrella blanca que gira lento
+    x.shadowColor = 'rgba(139,92,255,1)'; x.shadowBlur = 12; x.fillStyle = '#fff';
+    estrella(m.x, m.y, 8 + m.hover * 4, now / 1400);
+    x.shadowBlur = 0;
     requestAnimationFrame(bucle);
   })(performance.now());
 }
@@ -129,7 +174,7 @@ if (!sinMovimiento) {
 
     // 2) brillo magenta en el borde del hueco
     b.globalCompositeOperation = 'source-over'; b.clearRect(0, 0, w, h);
-    b.shadowColor = '#ff1fa9'; b.shadowBlur = 28; b.fillStyle = '#ff4fd0';
+    b.shadowColor = '#8b5cff'; b.shadowBlur = 28; b.fillStyle = '#d9c2ff';
     trazar(b, ahora, 1); b.fill();
     b.shadowBlur = 0; b.globalCompositeOperation = 'destination-out';
     trazar(b, ahora, 0.84 + 0.03 * Math.sin(ahora / 90)); b.fill();
@@ -143,7 +188,7 @@ if (!sinMovimiento) {
     brasas = brasas.filter(e => ahora - e.t < 1400);
     brasas.forEach(e => {
       const k = 1 - (ahora - e.t) / 1400; e.x += e.vx; e.y += e.vy;
-      b.fillStyle = `rgba(255,${120 + k * 100 | 0},230,${k})`; b.fillRect(e.x, e.y, 2.2, 2.2);
+      b.fillStyle = `rgba(${170 + k * 60 | 0},${130 + k * 90 | 0},255,${k})`; b.fillRect(e.x, e.y, 2.2, 2.2);
     });
 
     if (manchas.length || brasas.length) requestAnimationFrame(cuadro);

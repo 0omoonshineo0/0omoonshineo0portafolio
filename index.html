@@ -3,16 +3,16 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Elizabeth · Portafolio</title>
+<title>MoonShine · Portafolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Rajdhani:wght@500;600&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Grenze+Gotisch:wght@500;700&family=Outfit:wght@300;400&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
+<div class="aura"></div>
 <canvas id="trail"></canvas>
-<div id="star">✦</div>
 
 <nav>
   <a href="#inicio">Inicio</a>
@@ -32,12 +32,18 @@
   <div class="burn" id="burn">
     <canvas id="photo"></canvas>
     <canvas id="fire"></canvas>
-    <span class="hint">✦ pasa el cursor o arrastra el dedo ✦</span>
+    <span class="hint">pasa el cursor o arrastra el dedo</span>
   </div>
 
-  <!-- Cambia ELIZABETH en las dos partes (el texto y data-t) -->
-  <h1 class="title" data-t="ELIZABETH">ELIZABETH</h1>
-  <p class="sub">Fotografía y video</p>
+  <!-- Título grande y nombre pequeño -->
+  <div class="plate">
+    <h1 class="title">MoonShine</h1>
+    <p class="sub">Elizabeth Rudas<span class="sep"></span>Portafolio</p>
+    <svg class="swash" viewBox="0 0 600 50" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 34 C90 34 120 6 205 18 S335 46 425 26 S540 12 600 26"/>
+      <path class="d" d="M4 29l5 5-5 5-5-5z"/><path class="d" d="M596 21l5 5-5 5-5-5z"/>
+    </svg>
+  </div>
 
   <div class="barcode"></div>
   <svg class="rings" viewBox="0 0 120 120" aria-hidden="true">
@@ -90,7 +96,7 @@
   </p>
 </section>
 
-<footer>✦ Elizabeth ✦</footer>
+<footer>✦ MoonShine ✦</footer>
 
 <script src="script.js"></script>
 </body>
