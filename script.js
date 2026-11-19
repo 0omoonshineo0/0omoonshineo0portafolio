@@ -586,25 +586,31 @@ if(!sinMovimiento){
     }
   }
 
-  function positionTargets(){
-    const ratio = source.naturalWidth / source.naturalHeight;
-    const mobile = W < 700;
-    const targetHeight = Math.min(H * (mobile ? .72 : .91), W / ratio * (mobile ? 1.05 : 1.18));
-    const targetWidth = targetHeight * ratio;
+ function positionTargets(){
+  const ratio = source.naturalWidth / source.naturalHeight;
+  const mobile = W < 700;
 
-    /* La imagen ya tiene el rostro en 3/4, con ojos cerrados y mirando arriba a la izquierda. */
-    layout = {
-      width:targetWidth,
-      height:targetHeight,
-      left:W - targetWidth + (mobile ? targetWidth * .02 : targetWidth * .02),
-      top:H - targetHeight + (mobile ? targetHeight * .08 : targetHeight * .02)
-    };
+  const targetHeight = Math.min(
+    H * (mobile ? .80 : 1.02),
+    W / ratio * (mobile ? 1.16 : 1.32)
+  );
 
-    particles.forEach(p => {
-      p.tx = layout.left + p.ox * layout.width;
-      p.ty = layout.top + p.oy * layout.height;
-    });
-  }
+  const targetWidth = targetHeight * ratio;
+
+  layout = {
+    width: targetWidth,
+    height: targetHeight,
+
+    left: W - targetWidth * (mobile ? 1.02 : 1.08),
+
+    top: H - targetHeight * (mobile ? .98 : 1.03)
+  };
+
+  particles.forEach(p => {
+    p.tx = layout.left + p.ox * layout.width;
+    p.ty = layout.top + p.oy * layout.height;
+  });
+}
 
   function buildParticles(){
     const off = document.createElement('canvas');
