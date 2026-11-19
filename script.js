@@ -564,13 +564,13 @@ if(!sinMovimiento){
   let animationId = null;
   let lastTime = 0;
 
-  const settings = {
-    sampleStep: 4,
-    maxParticles: 17000,
-    radius: 155,
-    push: 7.5,
-    spring: 0.018,
-    friction: 0.91
+ const settings = {
+  sampleStep: 4,
+  maxParticles: 17000,
+  radius: 78,
+  push: 5.8,
+  spring: 0.018,
+  friction: 0.91
   };
 
   function resize(){
