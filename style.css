@@ -97,7 +97,7 @@ nav a:hover{color:var(--cian);opacity:1}
   padding:1.6rem 3rem 1.3rem;border-radius:28px;
 }
 .title{
-  position:relative;font:300 clamp(3.2rem,11vw,9.5rem)/.95 var(--goth);
+  position:relative;font:100 clamp(3.2rem,11vw,9.5rem)/.95 var(--goth);
   background:linear-gradient(180deg,#fff 20%,var(--lila));
   -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 0 20px rgba(139,92,255,.5));
