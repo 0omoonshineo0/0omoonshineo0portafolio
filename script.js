@@ -28,7 +28,8 @@ document.querySelectorAll('.vid').forEach(v => {
 
 
 
-/* ===== REVELACIÓN CÓSMICA CON VAPOR Y POLVO ESTELAR ===== */
+
+/* ===== REVELACIÓN CÓSMICA: VAPOR GLASS MATE ===== */
 
 if(!sinMovimiento){
 
@@ -46,9 +47,13 @@ if(!sinMovimiento){
   let corriendo = false;
 
   let particulas = [];
+  let zonas = [];
 
   let lx = -999;
   let ly = -999;
+
+  let despejadoHasta = 0;
+  let ultimoTiempo = 0;
 
   const d = Math.min(devicePixelRatio || 1,1.5);
 
@@ -59,12 +64,12 @@ if(!sinMovimiento){
     if(listo){
 
       const s = Math.max(
-        w / img.width,
-        h / img.height
+        w/img.width,
+        h/img.height
       );
 
-      const iw = img.width * s;
-      const ih = img.height * s;
+      const iw = img.width*s;
+      const ih = img.height*s;
 
       a.drawImage(
         img,
@@ -76,49 +81,44 @@ if(!sinMovimiento){
 
     }else{
 
-      const g = a.createLinearGradient(0,0,w,h);
-
-      g.addColorStop(0,'#2a0a3d');
-      g.addColorStop(1,'#5a0a1f');
-
-      a.fillStyle = g;
+      a.fillStyle = '#000';
       a.fillRect(0,0,w,h);
 
     }
 
   }
 
-  /* ===== CAPA DE VAPOR MATE ===== */
+  /* ===== VAPOR GLASS MATE ===== */
 
-  function vapor(){
+  function dibujarVapor(){
+
+    a.save();
 
     a.globalCompositeOperation = 'source-over';
 
     const base = a.createLinearGradient(0,0,w,h);
 
-    base.addColorStop(0,'rgba(185,181,198,.97)');
-    base.addColorStop(.45,'rgba(139,137,157,.96)');
-    base.addColorStop(1,'rgba(91,88,111,.97)');
+    base.addColorStop(0,'rgba(0,0,0,.99)');
+    base.addColorStop(.5,'rgba(12,10,19,.98)');
+    base.addColorStop(1,'rgba(0,0,0,.99)');
 
     a.fillStyle = base;
     a.fillRect(0,0,w,h);
 
-    /* Nubes suaves de vidrio esmerilado */
+    for(let i=0;i<28;i++){
 
-    for(let i=0;i<22;i++){
-
-      const x = Math.random()*w;
-      const y = Math.random()*h;
-      const r = 35 + Math.random()*100;
+      const x = (i*137.5)%w;
+      const y = (i*83.7)%h;
+      const r = 35+(i%5)*19;
 
       const nube = a.createRadialGradient(
         x,y,0,
         x,y,r
       );
 
-      nube.addColorStop(0,'rgba(235,230,245,.19)');
-      nube.addColorStop(.5,'rgba(205,195,222,.09)');
-      nube.addColorStop(1,'rgba(205,195,222,0)');
+      nube.addColorStop(0,'rgba(165,158,183,.10)');
+      nube.addColorStop(.55,'rgba(120,113,139,.055)');
+      nube.addColorStop(1,'rgba(100,90,120,0)');
 
       a.fillStyle = nube;
 
@@ -128,7 +128,11 @@ if(!sinMovimiento){
 
     }
 
+    a.restore();
+
   }
+
+  /* ===== AJUSTAR CANVAS ===== */
 
   function ajustar(){
 
@@ -146,7 +150,7 @@ if(!sinMovimiento){
     b.setTransform(d,0,0,d,0,0);
 
     foto();
-    vapor();
+    dibujarVapor();
 
   }
 
@@ -161,48 +165,26 @@ if(!sinMovimiento){
 
   addEventListener('resize',ajustar);
 
-  /* ===== CONSUMIR EL VAPOR ===== */
+  /* ===== ZONAS DE DESPEJE ===== */
 
-  function consumir(px,py,intensidad=1){
+  function despejar(px,py,intensidad=1){
 
-    a.save();
+    zonas.push({
 
-    a.globalCompositeOperation = 'destination-out';
+      x:px,
+      y:py,
 
-    const cantidad = Math.round(5 + intensidad*9);
+      radio:0,
+      maxRadio:45*intensidad,
 
-    for(let i=0;i<cantidad;i++){
+      fuerza:1,
+      t:performance.now()
 
-      const angulo = Math.random()*Math.PI*2;
-      const distancia = Math.random()*intensidad*30;
-
-      const x = px + Math.cos(angulo)*distancia;
-      const y = py + Math.sin(angulo)*distancia;
-
-      const radio = 10 + Math.random()*intensidad*20;
-
-      const forma = a.createRadialGradient(
-        x,y,0,
-        x,y,radio
-      );
-
-      forma.addColorStop(0,'rgba(0,0,0,.95)');
-      forma.addColorStop(.45,'rgba(0,0,0,.75)');
-      forma.addColorStop(1,'rgba(0,0,0,0)');
-
-      a.fillStyle = forma;
-
-      a.beginPath();
-      a.arc(x,y,radio,0,Math.PI*2);
-      a.fill();
-
-    }
-
-    a.restore();
+    });
 
   }
 
-  /* ===== POLVO ESTELAR ===== */
+  /* ===== PARTÍCULAS ===== */
 
   function emitir(px,py,cantidad=12){
 
@@ -211,21 +193,21 @@ if(!sinMovimiento){
     for(let i=0;i<cantidad;i++){
 
       const angulo = Math.random()*Math.PI*2;
-      const velocidad = .15 + Math.random()*1.1;
+      const velocidad = .15+Math.random()*1;
 
       particulas.push({
 
-        x:px + (Math.random()-.5)*30,
-        y:py + (Math.random()-.5)*30,
+        x:px+(Math.random()-.5)*25,
+        y:py+(Math.random()-.5)*25,
 
         vx:Math.cos(angulo)*velocidad,
         vy:Math.sin(angulo)*velocidad,
 
         size:tamanos[Math.random()*tamanos.length|0],
 
-        estrella:Math.random() < .35,
+        estrella:Math.random()<.35,
 
-        vida:650 + Math.random()*650,
+        vida:650+Math.random()*650,
         t:performance.now()
 
       });
@@ -243,38 +225,103 @@ if(!sinMovimiento){
 
   /* ===== ESTRELLAS DE CUATRO PUNTAS ===== */
 
-  function dibujarEstrella(x,y,tamano){
+  function estrella(x,y,s){
 
     b.beginPath();
 
-    b.moveTo(x,y-tamano*2);
-    b.quadraticCurveTo(x+.35*tamano,y-.35*tamano,x+tamano*2,y);
+    b.moveTo(x,y-s*2);
+    b.quadraticCurveTo(x+s*.3,y-s*.3,x+s*2,y);
 
-    b.quadraticCurveTo(x+.35*tamano,y+.35*tamano,x,y+tamano*2);
+    b.quadraticCurveTo(x+s*.3,y+s*.3,x,y+s*2);
 
-    b.quadraticCurveTo(x-.35*tamano,y+.35*tamano,x-tamano*2,y);
+    b.quadraticCurveTo(x-s*.3,y+s*.3,x-s*2,y);
 
-    b.quadraticCurveTo(x-.35*tamano,y-.35*tamano,x,y-tamano*2);
+    b.quadraticCurveTo(x-s*.3,y-s*.3,x,y-s*2);
 
     b.closePath();
     b.fill();
 
   }
 
-  /* ===== ANIMACIÓN DE PARTÍCULAS ===== */
+  /* ===== ANIMACIÓN PRINCIPAL ===== */
 
   function cuadro(ahora){
+
+    const delta = ultimoTiempo
+      ? Math.min(ahora-ultimoTiempo,40)
+      : 16;
+
+    ultimoTiempo = ahora;
+
+    const despejado = ahora < despejadoHasta;
+
+    /* Reconstruir el vapor */
+
+    a.clearRect(0,0,w,h);
+
+    if(!despejado){
+
+      foto();
+      dibujarVapor();
+
+      /* Despeje suave siguiendo el cursor */
+
+      zonas.forEach(z => {
+
+        const edad = ahora-z.t;
+
+        z.radio += delta*.12;
+
+        const opacidad = Math.max(
+          0,
+          1-edad/850
+        );
+
+        a.globalCompositeOperation = 'destination-out';
+
+        const gradiente = a.createRadialGradient(
+          z.x,z.y,0,
+          z.x,z.y,z.radio
+        );
+
+        gradiente.addColorStop(0,`rgba(0,0,0,${opacidad})`);
+        gradiente.addColorStop(.48,`rgba(0,0,0,${opacidad*.85})`);
+        gradiente.addColorStop(.78,`rgba(0,0,0,${opacidad*.35})`);
+        gradiente.addColorStop(1,'rgba(0,0,0,0)');
+
+        a.fillStyle = gradiente;
+
+        a.beginPath();
+        a.arc(z.x,z.y,z.radio,0,Math.PI*2);
+        a.fill();
+
+      });
+
+      a.globalCompositeOperation = 'source-over';
+
+      zonas = zonas.filter(z => ahora-z.t<850);
+
+    }else{
+
+      /* Fotografía totalmente despejada */
+
+      foto();
+
+      zonas = [];
+
+    }
+
+    /* Polvo estelar */
 
     b.clearRect(0,0,w,h);
 
     particulas = particulas.filter(
-      p => ahora-p.t < p.vida
+      p => ahora-p.t<p.vida
     );
 
     particulas.forEach(p => {
 
-      const tiempo = (ahora-p.t)/p.vida;
-      const opacidad = 1-tiempo;
+      const vida = 1-(ahora-p.t)/p.vida;
 
       p.x += p.vx;
       p.y += p.vy;
@@ -282,19 +329,14 @@ if(!sinMovimiento){
       p.vx *= .985;
       p.vy *= .985;
 
-      b.globalAlpha = opacidad;
-
+      b.globalAlpha = vida;
       b.fillStyle = '#eeeaff';
       b.shadowColor = '#c9b8ff';
       b.shadowBlur = 5;
 
       if(p.estrella){
 
-        dibujarEstrella(
-          p.x,
-          p.y,
-          p.size
-        );
+        estrella(p.x,p.y,p.size);
 
       }else{
 
@@ -309,13 +351,26 @@ if(!sinMovimiento){
     b.globalAlpha = 1;
     b.shadowBlur = 0;
 
-    if(particulas.length){
+    /* Continuar mientras haya actividad */
+
+    if(
+      zonas.length ||
+      particulas.length ||
+      despejado ||
+      ahora-despejadoHasta<900
+    ){
 
       requestAnimationFrame(cuadro);
 
     }else{
 
       corriendo = false;
+      ultimoTiempo = 0;
+
+      a.clearRect(0,0,w,h);
+      foto();
+      dibujarVapor();
+
       b.clearRect(0,0,w,h);
 
     }
@@ -331,13 +386,24 @@ if(!sinMovimiento){
     const px = cx-r.left;
     const py = cy-r.top;
 
-    if(Math.hypot(px-lx,py-ly)>12){
+    if(Math.hypot(px-lx,py-ly)>7){
 
       lx = px;
       ly = py;
 
-      consumir(px,py,.8);
-      emitir(px,py,12);
+      if(performance.now()>=despejadoHasta){
+
+        despejar(px,py,.9);
+        emitir(px,py,8);
+
+      }
+
+      if(!corriendo){
+
+        corriendo = true;
+        requestAnimationFrame(cuadro);
+
+      }
 
     }
 
@@ -351,21 +417,37 @@ if(!sinMovimiento){
 
   });
 
-  /* ===== EXPLOSIÓN SUAVE AL HACER CLIC ===== */
+  /* ===== CLIC: DESPEJE TOTAL POR 15 SEGUNDOS ===== */
+
+  function revelarTodo(px,py){
+
+    despejadoHasta = performance.now()+15000;
+
+    zonas = [];
+
+    emitir(px,py,65);
+
+    if(!corriendo){
+
+      corriendo = true;
+      requestAnimationFrame(cuadro);
+
+    }
+
+  }
 
   caja.addEventListener('pointerdown',e => {
 
     const r = caja.getBoundingClientRect();
 
-    const px = e.clientX-r.left;
-    const py = e.clientY-r.top;
-
-    consumir(px,py,2.5);
-    emitir(px,py,55);
+    revelarTodo(
+      e.clientX-r.left,
+      e.clientY-r.top
+    );
 
   });
 
-  /* ===== INTERACCIÓN TÁCTIL ===== */
+  /* ===== TÁCTIL ===== */
 
   caja.addEventListener('touchmove',e => {
 
@@ -380,15 +462,15 @@ if(!sinMovimiento){
 
     const r = caja.getBoundingClientRect();
 
-    const px = e.touches[0].clientX-r.left;
-    const py = e.touches[0].clientY-r.top;
-
-    consumir(px,py,2.5);
-    emitir(px,py,55);
+    revelarTodo(
+      e.touches[0].clientX-r.left,
+      e.touches[0].clientY-r.top
+    );
 
   },{passive:true});
 
 }
+
 
 /* ===== ROSTRO CÓSMICO INTERACTIVO ===== */
 
