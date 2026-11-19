@@ -5,7 +5,7 @@ const sinMovimiento = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 const reloj = $('#clock');
 
-const hora = () => {
+const hora = () => {f
   reloj.textContent = new Date().toTimeString().slice(0, 5);
 };
 
@@ -589,11 +589,13 @@ if(!sinMovimiento){
  function positionTargets(){
   const ratio = source.naturalWidth / source.naturalHeight;
   const mobile = W < 700;
+   
+const targetHeight = Math.min(
+  H * (mobile ? .90 : 1.15),
+  W / ratio * (mobile ? 1.25 : 1.45)
+);
 
-  const targetHeight = Math.min(
-    H * (mobile ? .80 : 1.02),
-    W / ratio * (mobile ? 1.16 : 1.32)
-  );
+const targetWidth = targetHeight * ratio;
 
   const targetWidth = targetHeight * ratio;
 
