@@ -1443,17 +1443,112 @@ if(photoCards.length && lightbox){
 
     ctx.globalAlpha = 1;
     ctx.shadowBlur = 0;
-
     requestAnimationFrame(animate);
 
   }
 
-
   window.addEventListener('resize', resize);
-
   resize();
+   
 
   requestAnimationFrame(animate);
 
 })();
 
+
+/* =====================================================
+   REPRODUCTOR MUSICAL MOONSHINE
+===================================================== */
+
+(() => {
+
+  const audio = $('#moonshineAudio');
+  const toggle = $('#musicToggle');
+  const progress = $('#musicProgress');
+  const volume = $('#musicVolume');
+
+  if(!audio || !toggle || !progress || !volume) return;
+
+  audio.volume = 0.08;
+  audio.loop = true;
+
+  function actualizarBoton(){
+    const reproduciendo = !audio.paused;
+
+    toggle.textContent = reproduciendo ? 'Ⅱ' : '▶';
+    toggle.setAttribute(
+      'aria-label',
+      reproduciendo ? 'Pausar música' : 'Reproducir música'
+    );
+  }
+
+  /* Intentar reproducir al entrar */
+
+  audio.play()
+    .then(actualizarBoton)
+    .catch(() => {
+      actualizarBoton();
+    });
+
+  /* Reproducir / pausar */
+
+  toggle.addEventListener('click', () => {
+
+    if(audio.paused){
+      audio.play().catch(() => actualizarBoton());
+    }else{
+      audio.pause();
+    }
+
+  });
+
+  audio.addEventListener('play', actualizarBoton);
+  audio.addEventListener('pause', actualizarBoton);
+
+  /* Actualizar barra de progreso */
+
+  audio.addEventListener('timeupdate', () => {
+
+    if(!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+
+    progress.value = (audio.currentTime / audio.duration) * 100;
+
+    progress.style.setProperty(
+      '--progress',
+      `${progress.value}%`
+    );
+
+  });
+
+  /* Permitir avanzar o retroceder */
+
+  progress.addEventListener('input', () => {
+
+    if(!Number.isFinite(audio.duration) || audio.duration <= 0) return;
+
+    audio.currentTime = (progress.value / 100) * audio.duration;
+
+    progress.style.setProperty(
+      '--progress',
+      `${progress.value}%`
+    );
+
+  });
+
+  /* Control de volumen */
+
+  volume.addEventListener('input', () => {
+
+    audio.volume = Number(volume.value);
+
+    volume.style.setProperty(
+      '--volume',
+      `${volume.value * 100}%`
+    );
+
+  });
+
+  volume.style.setProperty('--volume', '8%');
+  progress.style.setProperty('--progress', '0%');
+
+})();
