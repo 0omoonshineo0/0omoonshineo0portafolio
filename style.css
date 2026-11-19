@@ -745,6 +745,181 @@ nav{
   z-index:200;
 }
 
+
+
+/* =====================================
+   SOBRE MI — MOONSHINE GLASS
+===================================== */
+
+.about-section {
+  position: relative;
+}
+
+.about-wrap {
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-heading {
+  margin-bottom: 8px;
+}
+
+.about-kicker,
+.about-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  color: var(--lila);
+  opacity: 0.85;
+}
+
+.about-heading h2 {
+  margin-top: 12px;
+}
+
+/* RECUADROS */
+
+.about-card {
+  background: rgba(30, 22, 39, 0.72);
+  border: 1px solid rgba(205, 188, 255, 0.16);
+  border-radius: 12px;
+  padding: 27px 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* PRESENTACIÓN */
+
+.about-intro p {
+  max-width: 850px;
+  margin: 17px 0 0;
+  color: var(--plata);
+  font-size: 0.98rem;
+  line-height: 1.9;
+  font-weight: 300;
+}
+
+/* DOS COLUMNAS */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* LISTAS */
+
+.about-list {
+  list-style: none;
+  padding: 0;
+  margin: 19px 0 0;
+}
+
+.about-list li {
+  color: var(--plata);
+  font-size: 0.91rem;
+  font-weight: 300;
+  line-height: 1.7;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(205, 188, 255, 0.09);
+}
+
+.about-list li:last-child {
+  border-bottom: none;
+}
+
+/* PROYECTOS */
+
+.about-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.about-project {
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(205, 188, 255, 0.13);
+}
+
+.about-project:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.about-project h3 {
+  margin: 0 0 6px;
+  color: var(--plata);
+  font-family: var(--sans);
+  font-size: 1.02rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.about-project span {
+  color: var(--lila);
+  font-size: 0.77rem;
+  letter-spacing: 0.06em;
+}
+
+.about-project p {
+  margin: 12px 0 0;
+  max-width: 850px;
+  color: var(--plata);
+  opacity: 0.82;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* INTERESES */
+
+.about-interests p {
+  margin: 17px 0 0;
+  color: var(--plata);
+  font-size: 0.91rem;
+  line-height: 1.85;
+  font-weight: 300;
+}
+
+.about-interests p + p {
+  margin-top: 12px;
+}
+
+/* ADAPTACIÓN A MÓVILES */
+
+@media (max-width: 650px) {
+
+  .about-wrap {
+    gap: 14px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .about-card {
+    padding: 22px 20px;
+    border-radius: 10px;
+  }
+
+  .about-intro p,
+  .about-interests p {
+    font-size: 0.88rem;
+    line-height: 1.8;
+  }
+
+  .about-project p {
+    font-size: 0.85rem;
+  }
+
+}
+
+
 @media(max-width:800px){
   #cosmicFace{opacity:.9;}
 }
