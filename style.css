@@ -97,15 +97,11 @@ nav a:hover{color:var(--cian);opacity:1}
   padding:1.6rem 3rem 1.3rem;border-radius:28px;
 }
 .title{
-  position:relative;
-  font:400 clamp(2.8rem,7vw,6.5rem)/1.2 var(--goth);
-  letter-spacing:.015em;
+  position:relative;font:300 clamp(3.2rem,11vw,9.5rem)/.95 var(--goth);
   background:linear-gradient(180deg,#fff 20%,var(--lila));
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
+  -webkit-background-clip:text;background-clip:text;color:transparent;
   filter:drop-shadow(0 0 20px rgba(139,92,255,.5));
-
+}
 }
 .sub{
   position:relative;margin-top:.5rem;display:flex;align-items:center;
