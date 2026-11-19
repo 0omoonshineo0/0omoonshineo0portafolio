@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elizabeth · Portafolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&family=Rajdhani:wght@500;600&family=UnifrakturCook:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<canvas id="trail"></canvas>
+<div id="star">✦</div>
+
+<nav>
+  <a href="#inicio">Inicio</a>
+  <a href="#fotografia">Fotografía</a>
+  <a href="#videos">Videos</a>
+  <a href="#sobre-mi">Sobre mí</a>
+  <a href="#contacto">Contacto</a>
+</nav>
+
+<!-- ============ INICIO ============ -->
+<header id="inicio" class="hero">
+  <div class="frame"><i></i><i></i><i></i><i></i></div>
+  <div class="stripes"></div>
+  <div class="clock" id="clock">00:00</div>
+
+  <!-- La foto de la portada es media/portada.jpg -->
+  <div class="burn" id="burn">
+    <canvas id="photo"></canvas>
+    <canvas id="fire"></canvas>
+    <span class="hint">✦ pasa el cursor o arrastra el dedo ✦</span>
+  </div>
+
+  <!-- Cambia ELIZABETH en las dos partes (el texto y data-t) -->
+  <h1 class="title" data-t="ELIZABETH">ELIZABETH</h1>
+  <p class="sub">Fotografía y video</p>
+
+  <div class="barcode"></div>
+  <svg class="rings" viewBox="0 0 120 120" aria-hidden="true">
+    <ellipse cx="60" cy="60" rx="55" ry="14"/><ellipse cx="60" cy="60" rx="55" ry="24"/>
+    <ellipse cx="60" cy="60" rx="55" ry="34"/><ellipse cx="60" cy="60" rx="55" ry="44"/>
+    <ellipse cx="60" cy="60" rx="55" ry="54"/>
+  </svg>
+  <aside class="box">
+    <b>Sobre mí</b>
+    <p>Escribe aquí una frase corta sobre ti y tu trabajo.</p>
+  </aside>
+</header>
+
+<!-- ============ FOTOGRAFÍA ============ -->
+<section id="fotografia" class="sec">
+  <h2>Fotografía</h2>
+  <p class="lead">Sube tus fotos a la carpeta media con los nombres foto1.jpg, foto2.jpg… y aparecen aquí.</p>
+  <div class="grid">
+    <figure class="ph" data-l="foto1"><img src="media/foto1.jpg" alt="" loading="lazy" onerror="this.remove()"></figure>
+    <figure class="ph" data-l="foto2"><img src="media/foto2.jpg" alt="" loading="lazy" onerror="this.remove()"></figure>
+    <figure class="ph" data-l="foto3"><img src="media/foto3.jpg" alt="" loading="lazy" onerror="this.remove()"></figure>
+    <figure class="ph" data-l="foto4"><img src="media/foto4.jpg" alt="" loading="lazy" onerror="this.remove()"></figure>
+    <figure class="ph" data-l="foto5"><img src="media/foto5.jpg" alt="" loading="lazy" onerror="this.remove()"></figure>
+    <figure class="ph" data-l="foto6"><img src="media/foto6.jpg" alt="" loading="lazy" onerror="this.remove()"></figure>
+  </div>
+</section>
+
+<!-- ============ VIDEOS ============ -->
+<section id="videos" class="sec">
+  <h2>Videos</h2>
+  <p class="lead">Para mostrar un video, pega el número de Vimeo en data-vimeo (por ejemplo data-vimeo="123456789").</p>
+  <div class="vids">
+    <div class="vid" data-l="video1" data-vimeo=""></div>
+    <div class="vid" data-l="video2" data-vimeo=""></div>
+  </div>
+</section>
+
+<!-- ============ SOBRE MÍ ============ -->
+<section id="sobre-mi" class="sec">
+  <h2>Sobre mí</h2>
+  <p class="lead">Escribe aquí quién eres, qué te inspira y qué tipo de proyectos quieres hacer.</p>
+</section>
+
+<!-- ============ CONTACTO ============ -->
+<section id="contacto" class="sec">
+  <h2>Contacto</h2>
+  <p class="lead">
+    <a href="mailto:tu@correo.com">tu@correo.com</a><br>
+    <a href="https://instagram.com/tuusuario">@tuusuario</a>
+  </p>
+</section>
+
+<footer>✦ Elizabeth ✦</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
