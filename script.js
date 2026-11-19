@@ -26,7 +26,8 @@ document.querySelectorAll('.vid').forEach(v => {
 });
 
 
-/* ===== EFECTO DE QUEMADO DE PORTADA ===== */
+
+/* ===== REVELACIÓN CÓSMICA DE PORTADA ===== */
 
 if(!sinMovimiento){
 
@@ -43,15 +44,13 @@ if(!sinMovimiento){
   let w,h;
   let corriendo = false;
 
-  let manchas = [];
-  let brasas = [];
+  let luces = [];
+  let particulas = [];
 
   let lx = -999;
   let ly = -999;
 
   const d = Math.min(devicePixelRatio || 1,1.5);
-
-  const VIDA = 5200;
 
   function foto(){
 
@@ -100,9 +99,7 @@ if(!sinMovimiento){
     a.setTransform(d,0,0,d,0,0);
     b.setTransform(d,0,0,d,0,0);
 
-    if(!corriendo){
-      foto();
-    }
+    foto();
 
   }
 
@@ -117,72 +114,33 @@ if(!sinMovimiento){
 
   addEventListener('resize',ajustar);
 
-  const escala = t => {
+  function destello(px,py){
 
-    const e = Math.min(1,t / 450);
-    const grow = 1 - Math.pow(1 - e,3);
+    luces.push({
+      x:px,
+      y:py,
+      radio:0,
+      vida:1100,
+      t:performance.now()
+    });
 
-    return t < 2600
-      ? grow
-      : grow * Math.max(0,1 - (t - 2600) / (VIDA - 2600));
+    for(let i=0;i<9;i++){
 
-  };
+      particulas.push({
 
-  function cada(ahora,k,fn){
+        x:px,
+        y:py,
 
-    manchas.forEach(m => {
+        vx:(Math.random()-.5)*1.8,
+        vy:(Math.random()-.5)*1.8,
 
-      const sc = escala(ahora - m.t);
-
-      m.l.forEach(l => {
-
-        fn(
-          m.x + Math.cos(l.a) * l.d * m.R * sc,
-          m.y + Math.sin(l.a) * l.d * m.R * sc,
-          l.r * m.R * sc * k
-        );
+        size:1 + Math.random()*2.2,
+        vida:500 + Math.random()*500,
+        t:performance.now()
 
       });
 
-    });
-
-  }
-
-  const trazar = (ctx,ahora,k) => {
-
-    ctx.beginPath();
-
-    cada(ahora,k,(px,py,r) => {
-
-      if(r > .5){
-        ctx.moveTo(px + r,py);
-        ctx.arc(px,py,r,0,6.283);
-      }
-
-    });
-
-  };
-
-  function quemar(px,py){
-
-    manchas.push({
-
-      x:px,
-      y:py,
-
-      R:70 + Math.random() * 55,
-      t:performance.now(),
-
-      l:Array.from(
-        {length:7},
-        () => ({
-          a:Math.random() * 6.283,
-          d:Math.random() * .7,
-          r:.45 + Math.random() * .5
-        })
-      )
-
-    });
+    }
 
     if(!corriendo){
 
@@ -195,101 +153,74 @@ if(!sinMovimiento){
 
   function cuadro(ahora){
 
-    manchas = manchas.filter(
-      m => ahora - m.t < VIDA
-    );
-
-    /* Foto y borde */
-
-    a.globalCompositeOperation = 'source-over';
     a.clearRect(0,0,w,h);
-
     foto();
 
-    a.fillStyle = 'rgba(12,0,8,.92)';
-    trazar(a,ahora,1.18);
-    a.fill();
-
-    a.globalCompositeOperation = 'destination-out';
-    trazar(a,ahora,1);
-    a.fill();
-
-    a.globalCompositeOperation = 'source-over';
-
-    /* Brillo */
-
-    b.globalCompositeOperation = 'source-over';
     b.clearRect(0,0,w,h);
 
-    b.shadowColor = '#8b5cff';
-    b.shadowBlur = 28;
-    b.fillStyle = '#d9c2ff';
-
-    trazar(b,ahora,1);
-    b.fill();
-
-    b.shadowBlur = 0;
-    b.globalCompositeOperation = 'destination-out';
-
-    trazar(
-      b,
-      ahora,
-      0.84 + 0.03 * Math.sin(ahora / 90)
+    luces = luces.filter(
+      l => ahora-l.t < l.vida
     );
 
-    b.fill();
-    b.globalCompositeOperation = 'source-over';
-
-    /* Brasas */
-
-    if(manchas.length && Math.random() < .7){
-
-      const m = manchas[
-        Math.random() * manchas.length | 0
-      ];
-
-      brasas.push({
-
-        x:m.x + (Math.random() - .5) * m.R,
-        y:m.y + (Math.random() - .5) * m.R,
-
-        vx:(Math.random() - .5) * .6,
-        vy:-.6 - Math.random() * 1.2,
-
-        t:ahora
-
-      });
-
-    }
-
-    brasas = brasas.filter(
-      e => ahora - e.t < 1400
+    particulas = particulas.filter(
+      p => ahora-p.t < p.vida
     );
 
-    brasas.forEach(e => {
+    luces.forEach(l => {
 
-      const k = 1 - (ahora - e.t) / 1400;
+      const tiempo = (ahora-l.t)/l.vida;
 
-      e.x += e.vx;
-      e.y += e.vy;
+      l.radio = 12 + tiempo*24;
 
-      b.fillStyle = `rgba(${170 + k * 60 | 0},${130 + k * 90 | 0},255,${k})`;
+      const opacidad = 1-tiempo;
 
-      b.fillRect(e.x,e.y,2.2,2.2);
+      const gradiente = b.createRadialGradient(
+        l.x,l.y,0,
+        l.x,l.y,l.radio
+      );
+
+      gradiente.addColorStop(0,`rgba(255,255,255,${opacidad*.9})`);
+      gradiente.addColorStop(.25,`rgba(205,180,255,${opacidad*.55})`);
+      gradiente.addColorStop(.65,`rgba(139,92,255,${opacidad*.2})`);
+      gradiente.addColorStop(1,'rgba(139,92,255,0)');
+
+      b.fillStyle = gradiente;
+
+      b.beginPath();
+      b.arc(l.x,l.y,l.radio,0,Math.PI*2);
+      b.fill();
 
     });
 
-    if(manchas.length || brasas.length){
+    particulas.forEach(p => {
+
+      const tiempo = (ahora-p.t)/p.vida;
+      const opacidad = 1-tiempo;
+
+      p.x += p.vx;
+      p.y += p.vy;
+
+      b.globalAlpha = opacidad;
+      b.fillStyle = '#e9e6ff';
+      b.shadowColor = '#a78bfa';
+      b.shadowBlur = 12;
+
+      b.beginPath();
+      b.arc(p.x,p.y,p.size,0,Math.PI*2);
+      b.fill();
+
+    });
+
+    b.globalAlpha = 1;
+    b.shadowBlur = 0;
+
+    if(luces.length || particulas.length){
 
       requestAnimationFrame(cuadro);
 
     }else{
 
       corriendo = false;
-
-      a.clearRect(0,0,w,h);
-      foto();
-
       b.clearRect(0,0,w,h);
 
     }
@@ -300,15 +231,15 @@ if(!sinMovimiento){
 
     const r = caja.getBoundingClientRect();
 
-    const px = cx - r.left;
-    const py = cy - r.top;
+    const px = cx-r.left;
+    const py = cy-r.top;
 
-    if(Math.hypot(px - lx,py - ly) > 28){
+    if(Math.hypot(px-lx,py-ly)>16){
 
       lx = px;
       ly = py;
 
-      quemar(px,py);
+      destello(px,py);
 
     }
 
@@ -316,7 +247,7 @@ if(!sinMovimiento){
 
   caja.addEventListener('pointermove',e => {
 
-    if(e.pointerType === 'mouse'){
+    if(e.pointerType==='mouse'){
       mover(e.clientX,e.clientY);
     }
 
@@ -326,9 +257,9 @@ if(!sinMovimiento){
 
     const r = caja.getBoundingClientRect();
 
-    quemar(
-      e.clientX - r.left,
-      e.clientY - r.top
+    destello(
+      e.clientX-r.left,
+      e.clientY-r.top
     );
 
   });
@@ -343,8 +274,6 @@ if(!sinMovimiento){
   },{passive:true});
 
 }
-
-
 /* ===== ROSTRO CÓSMICO INTERACTIVO ===== */
 
 (() => {
