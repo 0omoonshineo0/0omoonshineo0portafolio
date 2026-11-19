@@ -140,7 +140,15 @@ nav a:hover{color:var(--cian);opacity:1}
 
 /* ===== SECCIONES ===== */
 .sec{padding:14vh 6vw 6vh;position:relative}
-.sec h2{font:600 clamp(2.6rem,6vw,4.6rem)/1 var(--goth);color:#fff;margin-bottom:1.2rem}
+.sec h2{
+  font-family:var(--goth);
+  font-size:clamp(1.8rem,3.5vw,3rem);
+  font-weight:400;
+  line-height:1.4;
+  letter-spacing:.08em;
+  color:#fff;
+  margin-bottom:1.2rem;
+}
 .sec h2::after{content:"";display:block;width:90px;height:1px;margin-top:.8rem;background:linear-gradient(90deg,var(--lila),transparent)}
 .lead{max-width:58ch;margin-bottom:2.2rem;opacity:.85}
 
