@@ -1054,3 +1054,50 @@ nav{
   }
 
 }
+
+/* ===== CONTACTO MOONSHINE ===== */
+
+.contact-section {
+  text-align: center;
+}
+
+.contact-section h2::after {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.contact-email {
+  font-size: .9rem;
+}
+
+.instagram-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: .85rem;
+  letter-spacing: .06em;
+  color: var(--lila);
+  transition: color .3s ease, text-shadow .3s ease;
+}
+
+.instagram-link svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+}
+
+.instagram-link:hover {
+  color: var(--cian);
+  text-shadow: 0 0 10px rgba(39,194,238,.4);
+}
+
