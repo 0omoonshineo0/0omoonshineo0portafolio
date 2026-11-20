@@ -1,17 +1,21 @@
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>MoonShine · Portafolio</title>
+
 <link rel="stylesheet" href="https://use.typekit.net/wel6uev.css">
 <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <canvas id="cosmicFace" aria-hidden="true"></canvas>
 
+<!-- ============ NAVEGACIÓN ============ -->
 <nav>
   <a href="#inicio">Inicio</a>
   <a href="#fotografia">Fotografía</a>
@@ -22,23 +26,38 @@
 
 <!-- ============ INICIO ============ -->
 <header id="inicio" class="hero">
-  <div class="frame"><i></i><i></i><i></i><i></i></div>
+
+  <div class="frame">
+    <i></i><i></i><i></i><i></i>
+  </div>
+
   <div class="stripes"></div>
+
   <div class="clock" id="clock">00:00</div>
+
   <div class="burn" id="burn">
     <canvas id="photo"></canvas>
     <canvas id="fire"></canvas>
   </div>
+
   <div class="plate">
+
     <h1 class="title">MoonShine</h1>
-    <p class="sub">Elizabeth Rudas<span class="sep"></span>Portafolio</p>
+
+    <p class="sub">
+      Elizabeth Rudas<span class="sep"></span>Portafolio
+    </p>
+
     <svg class="swash" viewBox="0 0 600 50" preserveAspectRatio="none" aria-hidden="true">
       <path d="M0 34 C90 34 120 6 205 18 S335 46 425 26 S540 12 600 26"/>
-      <path class="d" d="M4 29l5 5-5 5-5-5z"/>
+      <path class="d" d="M0 34l5 5-5 5-5-5z"/>
       <path class="d" d="M596 21l5 5-5 5-5-5z"/>
     </svg>
+
   </div>
+
   <div class="barcode"></div>
+
   <svg class="rings" viewBox="0 0 120 120" aria-hidden="true">
     <ellipse cx="60" cy="60" rx="55" ry="14"/>
     <ellipse cx="60" cy="60" rx="55" ry="24"/>
@@ -46,48 +65,86 @@
     <ellipse cx="60" cy="60" rx="55" ry="44"/>
     <ellipse cx="60" cy="60" rx="55" ry="54"/>
   </svg>
+
   <aside class="box">
     <b>Sobre mí</b>
     <p>Este es mi pequeño universo creativo.</p>
   </aside>
+
 </header>
 
+<!-- ============ FOTOGRAFÍA ============ -->
+<section id="fotografia" class="sec">
 
-<div class="photo-stage" id="photoStage">
+  <h2>Fotografía</h2>
 
-  <!-- FOTOGRAFÍA 1 -->
-  <figure class="ph photo-card" data-l="foto1" data-title="Pride Bandera">
-    <img src="media/pride bandera.avif" alt="Pride Bandera" loading="lazy">
-  </figure>
+  <div class="photo-carousel">
 
-  <!-- FOTOGRAFÍA 2 -->
-  <figure class="ph photo-card" data-l="foto2" data-title="Guajira - Paisaje">
-    <img src="media/guajira paisaje 2.avif" alt="Paisaje de La Guajira" loading="lazy">
-  </figure>
+    <button id="photoPrev" type="button" aria-label="Fotografía anterior">
+      ❮
+    </button>
 
-  <!-- FOTOGRAFÍA 3 -->
-  <figure class="ph photo-card" data-l="foto3" data-title="Pride Magenta">
-    <img src="media/pride magenta.avif" alt="Pride Magenta" loading="lazy">
-  </figure>
+    <div class="photo-stage" id="photoStage">
 
-  <!-- ESPACIOS RESERVADOS 4 AL 10 -->
-  <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 4"></figure>
-  <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 5"></figure>
-  <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 6"></figure>
-  <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 7"></figure>
-  <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 8"></figure>
-  <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 9"></figure>
-  <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 10"></figure>
+      <!-- FOTOGRAFÍA 1 -->
+      <figure class="ph photo-card" data-l="foto1" data-title="Pride Bandera">
+        <img
+          src="media/pride bandera.avif"
+          alt="Pride Bandera"
+          loading="lazy">
+      </figure>
 
-</div>
+      <!-- FOTOGRAFÍA 2 -->
+      <figure class="ph photo-card" data-l="foto2" data-title="Guajira - Paisaje">
+        <img
+          src="media/guajira paisaje 2.avif"
+          alt="Paisaje de La Guajira"
+          loading="lazy">
+      </figure>
+
+      <!-- FOTOGRAFÍA 3 -->
+      <figure class="ph photo-card" data-l="foto3" data-title="Pride Magenta">
+        <img
+          src="media/pride magenta.avif"
+          alt="Pride Magenta"
+          loading="lazy">
+      </figure>
+
+      <!-- ESPACIOS RESERVADOS 4 AL 10 -->
+      <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 4"></figure>
+
+      <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 5"></figure>
+
+      <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 6"></figure>
+
+      <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 7"></figure>
+
+      <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 8"></figure>
+
+      <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 9"></figure>
+
+      <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 10"></figure>
+
+    </div>
+
+    <button id="photoNext" type="button" aria-label="Fotografía siguiente">
+      ❯
+    </button>
+
+  </div>
+
+</section>
 
 <!-- ============ VIDEOS ============ -->
 <section id="videos" class="sec">
+
   <h2>Videos</h2>
+
   <div class="vids">
     <div class="vid" data-l="video1" data-vimeo=""></div>
     <div class="vid" data-l="video2" data-vimeo=""></div>
   </div>
+
 </section>
 
 <!-- ============ SOBRE MÍ ============ -->
@@ -102,6 +159,7 @@
 
     <!-- PRESENTACIÓN -->
     <div class="about-card about-intro">
+
       <span class="about-label">01 — PRESENTACIÓN</span>
 
       <p>
@@ -111,12 +169,14 @@
         composición visual, la dirección de arte, la fotografía,
         la ilustración y la producción audiovisual.
       </p>
+
     </div>
 
     <!-- HABILIDADES Y HERRAMIENTAS -->
     <div class="about-grid">
 
       <div class="about-card">
+
         <span class="about-label">02 — HABILIDADES</span>
 
         <ul class="about-list">
@@ -127,9 +187,11 @@
           <li>Maquillaje y caracterización FX</li>
           <li>Edición y producción audiovisual</li>
         </ul>
+
       </div>
 
       <div class="about-card">
+
         <span class="about-label">03 — HERRAMIENTAS</span>
 
         <ul class="about-list">
@@ -138,53 +200,65 @@
           <li>Adobe Premiere Pro</li>
           <li>Adobe After Effects</li>
         </ul>
+
       </div>
 
     </div>
 
     <!-- PROYECTOS -->
     <div class="about-card about-projects">
+
       <span class="about-label">04 — PROYECTOS DESTACADOS</span>
 
       <div class="about-project">
+
         <div>
           <h3>Sanguinem Meum Bibes</h3>
           <span>Dirección de arte</span>
         </div>
+
         <p>
           Maquillaje, selección de vestuario y ambientación
           de espacios en concordancia con la propuesta
           estética de dirección.
         </p>
+
       </div>
 
       <div class="about-project">
+
         <div>
           <h3>Sabor Amarillo</h3>
           <span>Asistencia principal de arte</span>
         </div>
+
         <p>
           Apoyo en decoración de escenografía, ambientación,
           organización de sets y gestión de utilería.
         </p>
+
       </div>
 
       <div class="about-project">
+
         <div>
           <h3>Vere Veris Laeta Facies</h3>
           <span>Proyecto personal de animación</span>
         </div>
+
         <p>
           Proyecto inspirado en un fragmento de Carmina Burana,
           con diseño original de personaje, ilustración y
           desarrollo de una propuesta de animación.
         </p>
+
       </div>
 
     </div>
 
     <!-- INTERESES -->
     <div class="about-card about-interests">
+
       <span class="about-label">05 — INTERESES E INSPIRACIÓN</span>
 
       <p>
@@ -198,9 +272,11 @@
         y viajes, así como la música clásica y coral, que forma
         parte de mis pasatiempos y fuentes de inspiración.
       </p>
+
     </div>
 
   </div>
+
 </section>
 
 <!-- ============ CONTACTO ============ -->
@@ -250,7 +326,9 @@
     <span class="music-title">The Endless River</span>
   </div>
 
-  <button id="musicToggle" type="button" aria-label="Reproducir música">▶</button>
+  <button id="musicToggle" type="button" aria-label="Reproducir música">
+    ▶
+  </button>
 
   <input
     id="musicProgress"
@@ -271,8 +349,10 @@
 
 </div>
 
+<!-- ============ PIE DE PÁGINA ============ -->
 <footer>✦ MoonShine ✦</footer>
 
 <script src="script.js"></script>
+
 </body>
 </html>
