@@ -15,7 +15,6 @@
 
 <canvas id="cosmicFace" aria-hidden="true"></canvas>
 
-<!-- ============ NAVEGACIÓN ============ -->
 <nav>
   <a href="#inicio">Inicio</a>
   <a href="#fotografia">Fotografía</a>
@@ -25,12 +24,10 @@
 </nav>
 
 <!-- ============ INICIO ============ -->
+
 <header id="inicio" class="hero">
 
-  <div class="frame">
-    <i></i><i></i><i></i><i></i>
-  </div>
-
+  <div class="frame"><i></i><i></i><i></i><i></i></div>
   <div class="stripes"></div>
 
   <div class="clock" id="clock">00:00</div>
@@ -41,19 +38,14 @@
   </div>
 
   <div class="plate">
-
     <h1 class="title">MoonShine</h1>
-
-    <p class="sub">
-      Elizabeth Rudas<span class="sep"></span>Portafolio
-    </p>
+    <p class="sub">Elizabeth Rudas<span class="sep"></span>Portafolio</p>
 
     <svg class="swash" viewBox="0 0 600 50" preserveAspectRatio="none" aria-hidden="true">
       <path d="M0 34 C90 34 120 6 205 18 S335 46 425 26 S540 12 600 26"/>
-      <path class="d" d="M0 34l5 5-5 5-5-5z"/>
+      <path class="d" d="M4 29l5 5-5 5-5-5z"/>
       <path class="d" d="M596 21l5 5-5 5-5-5z"/>
     </svg>
-
   </div>
 
   <div class="barcode"></div>
@@ -73,69 +65,95 @@
 
 </header>
 
+
 <!-- ============ FOTOGRAFÍA ============ -->
-<section id="fotografia" class="sec">
+
+<section id="fotografia" class="sec photo-section">
 
   <h2>Fotografía</h2>
 
   <div class="photo-carousel">
 
-    <button id="photoPrev" type="button" aria-label="Fotografía anterior">
-      ❮
-    </button>
+    <button
+      class="carousel-arrow prev"
+      id="photoPrev"
+      type="button"
+      aria-label="Fotografía anterior"
+    >‹</button>
 
     <div class="photo-stage" id="photoStage">
 
       <!-- FOTOGRAFÍA 1 -->
+
       <figure class="ph photo-card" data-l="foto1" data-title="Pride Bandera">
-        <img
-          src="media/pride bandera.avif"
-          alt="Pride Bandera"
-          loading="lazy">
+        <img src="media/pride bandera.avif" alt="Pride Bandera" loading="lazy">
       </figure>
 
       <!-- FOTOGRAFÍA 2 -->
+
       <figure class="ph photo-card" data-l="foto2" data-title="Guajira - Paisaje">
-        <img
-          src="media/guajira paisaje 2.avif"
-          alt="Paisaje de La Guajira"
-          loading="lazy">
+        <img src="media/guajira paisaje 2.avif" alt="Paisaje de La Guajira" loading="lazy">
       </figure>
 
       <!-- FOTOGRAFÍA 3 -->
+
       <figure class="ph photo-card" data-l="foto3" data-title="Pride Magenta">
-        <img
-          src="media/pride magenta.avif"
-          alt="Pride Magenta"
-          loading="lazy">
+        <img src="media/pride magenta.avif" alt="Pride Magenta" loading="lazy">
       </figure>
 
       <!-- ESPACIOS RESERVADOS 4 AL 10 -->
+
       <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 4"></figure>
-
       <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 5"></figure>
-
       <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 6"></figure>
-
       <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 7"></figure>
-
       <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 8"></figure>
-
       <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 9"></figure>
-
       <figure class="ph photo-card is-empty" aria-label="Espacio reservado para fotografía 10"></figure>
 
     </div>
 
-    <button id="photoNext" type="button" aria-label="Fotografía siguiente">
-      ❯
-    </button>
+    <button
+      class="carousel-arrow next"
+      id="photoNext"
+      type="button"
+      aria-label="Fotografía siguiente"
+    >›</button>
 
   </div>
 
 </section>
 
+
+<!-- ============ VENTANA AMPLIADA DE FOTOGRAFÍA ============ -->
+
+<div class="photo-lightbox" id="photoLightbox" aria-hidden="true">
+
+  <div class="lightbox-panel">
+
+    <button
+      class="lightbox-close"
+      id="lightboxClose"
+      type="button"
+      aria-label="Cerrar fotografía"
+    >×</button>
+
+    <div class="lightbox-image">
+      <img id="lightboxImg" src="" alt="">
+    </div>
+
+    <div class="lightbox-caption">
+      <span class="caption-line"></span>
+      <h3 id="lightboxTitle"></h3>
+    </div>
+
+  </div>
+
+</div>
+
+
 <!-- ============ VIDEOS ============ -->
+
 <section id="videos" class="sec">
 
   <h2>Videos</h2>
@@ -147,7 +165,9 @@
 
 </section>
 
+
 <!-- ============ SOBRE MÍ ============ -->
+
 <section id="sobre-mi" class="sec about-section">
 
   <div class="about-wrap">
@@ -157,11 +177,8 @@
       <h2>Sobre mí</h2>
     </div>
 
-    <!-- PRESENTACIÓN -->
     <div class="about-card about-intro">
-
       <span class="about-label">01 — PRESENTACIÓN</span>
-
       <p>
         Soy estudiante de Comunicación Audiovisual con un perfil
         creativo multidisciplinario e interés en la exploración
@@ -169,14 +186,11 @@
         composición visual, la dirección de arte, la fotografía,
         la ilustración y la producción audiovisual.
       </p>
-
     </div>
 
-    <!-- HABILIDADES Y HERRAMIENTAS -->
     <div class="about-grid">
 
       <div class="about-card">
-
         <span class="about-label">02 — HABILIDADES</span>
 
         <ul class="about-list">
@@ -187,11 +201,9 @@
           <li>Maquillaje y caracterización FX</li>
           <li>Edición y producción audiovisual</li>
         </ul>
-
       </div>
 
       <div class="about-card">
-
         <span class="about-label">03 — HERRAMIENTAS</span>
 
         <ul class="about-list">
@@ -200,78 +212,47 @@
           <li>Adobe Premiere Pro</li>
           <li>Adobe After Effects</li>
         </ul>
-
       </div>
 
     </div>
 
-    <!-- PROYECTOS -->
     <div class="about-card about-projects">
 
       <span class="about-label">04 — PROYECTOS DESTACADOS</span>
 
       <div class="about-project">
-
         <div>
           <h3>Sanguinem Meum Bibes</h3>
           <span>Dirección de arte</span>
         </div>
-
-        <p>
-          Maquillaje, selección de vestuario y ambientación
-          de espacios en concordancia con la propuesta
-          estética de dirección.
-        </p>
-
+        <p>Maquillaje, selección de vestuario y ambientación de espacios en concordancia con la propuesta estética de dirección.</p>
       </div>
 
       <div class="about-project">
-
         <div>
           <h3>Sabor Amarillo</h3>
           <span>Asistencia principal de arte</span>
         </div>
-
-        <p>
-          Apoyo en decoración de escenografía, ambientación,
-          organización de sets y gestión de utilería.
-        </p>
-
+        <p>Apoyo en decoración de escenografía, ambientación, organización de sets y gestión de utilería.</p>
       </div>
 
       <div class="about-project">
-
         <div>
           <h3>Vere Veris Laeta Facies</h3>
           <span>Proyecto personal de animación</span>
         </div>
-
-        <p>
-          Proyecto inspirado en un fragmento de Carmina Burana,
-          con diseño original de personaje, ilustración y
-          desarrollo de una propuesta de animación.
-        </p>
-
+        <p>Proyecto inspirado en un fragmento de Carmina Burana, con diseño original de personaje, ilustración y desarrollo de una propuesta de animación.</p>
       </div>
 
     </div>
 
-    <!-- INTERESES -->
     <div class="about-card about-interests">
 
       <span class="about-label">05 — INTERESES E INSPIRACIÓN</span>
 
-      <p>
-        Disfruto de las artes plásticas y la pintura, especialmente
-        del arte medieval, el prerrenacimiento, el romanticismo,
-        el barroco, el rococó, el pop art y el expresionismo.
-      </p>
+      <p>Disfruto de las artes plásticas y la pintura, especialmente del arte medieval, el prerrenacimiento, el romanticismo, el barroco, el rococó, el pop art y el expresionismo.</p>
 
-      <p>
-        También me interesa la fotografía espontánea de naturaleza
-        y viajes, así como la música clásica y coral, que forma
-        parte de mis pasatiempos y fuentes de inspiración.
-      </p>
+      <p>También me interesa la fotografía espontánea de naturaleza y viajes, así como la música clásica y coral, que forma parte de mis pasatiempos y fuentes de inspiración.</p>
 
     </div>
 
@@ -279,14 +260,16 @@
 
 </section>
 
+
 <!-- ============ CONTACTO ============ -->
+
 <section id="contacto" class="sec contact-section">
 
   <h2>Contacto</h2>
 
   <div class="contact-content">
 
-    <a class="contact-email" href="mailto:tu@correo.com">
+    <a class="contact-email" href="mailto:Elizabeth_rudas20222@elpoli.edu.co">
       Elizabeth_rudas20222@elpoli.edu.co
     </a>
 
@@ -295,40 +278,33 @@
       href="https://www.instagram.com/0omoonshineo0/"
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Visitar Instagram de MoonShine">
-
+      aria-label="Visitar Instagram de MoonShine"
+    >
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <rect x="3" y="3" width="18" height="18" rx="5"/>
         <circle cx="12" cy="12" r="4"/>
         <circle class="instagram-dot" cx="18" cy="6" r="1"/>
       </svg>
-
       <span>@0omoonshineo0</span>
-
     </a>
 
   </div>
 
 </section>
 
+
 <!-- ============ REPRODUCTOR MUSICAL ============ -->
+
 <div class="moon-player">
 
-  <audio
-    id="moonshineAudio"
-    src="media/The Endless River.mp3"
-    preload="auto"
-    loop>
-  </audio>
+  <audio id="moonshineAudio" src="media/The Endless River.mp3" preload="auto" loop></audio>
 
   <div class="music-info">
     <span class="music-label">MOONSHINE · SOUNDTRACK</span>
     <span class="music-title">The Endless River</span>
   </div>
 
-  <button id="musicToggle" type="button" aria-label="Reproducir música">
-    ▶
-  </button>
+  <button id="musicToggle" type="button" aria-label="Reproducir música">▶</button>
 
   <input
     id="musicProgress"
@@ -336,7 +312,8 @@
     type="range"
     min="0"
     max="100"
-    value="0">
+    value="0"
+  >
 
   <input
     id="musicVolume"
@@ -345,11 +322,12 @@
     min="0"
     max="1"
     step="0.01"
-    value="0.08">
+    value="0.08"
+  >
 
 </div>
 
-<!-- ============ PIE DE PÁGINA ============ -->
+
 <footer>✦ MoonShine ✦</footer>
 
 <script src="script.js"></script>
