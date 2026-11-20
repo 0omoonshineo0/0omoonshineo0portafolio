@@ -685,6 +685,694 @@ nav a:hover{
   transform:rotate(90deg);
 }
 
+
+/* ===== COLORES ===== */
+
+:root{
+  --noche:#08040f;
+  --vino:#290215;
+  --vino2:#521d38;
+  --carmesi:#c2273c;
+  --azul:#00385a;
+  --azul2:#096194;
+  --cian:#27c2ee;
+  --violeta:#8b5cff;
+  --lila:#cdbcff;
+  --plata:#e9e6f4;
+
+  --goth:'darka',sans-serif;
+  --sans:'Outfit',sans-serif;
+
+  --grano:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)' opacity='.55'/></svg>");
+}
+
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+html{
+  scroll-behavior:smooth;
+  background:#000;
+}
+
+body{
+  color:var(--plata);
+  font:300 1.12rem/1.6 var(--sans);
+  overflow-x:hidden;
+  background:#000;
+}
+
+a{
+  color:var(--lila);
+  text-decoration:none;
+  transition:color .2s;
+}
+
+a:hover{
+  color:var(--cian);
+}
+
+a:focus-visible{
+  outline:1px solid var(--cian);
+  outline-offset:4px;
+}
+
+/* ===== FONDO CÓSMICO ===== */
+
+.aura{display:none;}
+
+#cosmicFace{
+  position:fixed;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+  z-index:0;
+  pointer-events:none;
+}
+
+/* ===== VIDRIO ESMERILADO ===== */
+
+nav,.box,.clock,.plate,.ph,.vid{
+  border:1px solid rgba(255,255,255,.14);
+  background:linear-gradient(140deg,rgba(255,255,255,.09),rgba(255,255,255,.025));
+  -webkit-backdrop-filter:blur(22px) saturate(140%);
+  backdrop-filter:blur(22px) saturate(140%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 24px 60px rgba(8,2,24,.5);
+}
+
+nav::before,.box::before,.clock::before,.plate::before,.ph::before,.vid::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:var(--grano);
+  opacity:.09;
+  mix-blend-mode:overlay;
+}
+
+/* ===== PUNTERO TRADICIONAL ===== */
+/* No se oculta ni se reemplaza el cursor nativo del navegador. */
+
+/* ===== MENÚ ===== */
+
+nav{
+  position:fixed;
+  top:16px;
+  left:50%;
+  transform:translateX(-50%);
+  z-index:50;
+  display:flex;
+  gap:1.5rem;
+  padding:.65rem 1.5rem;
+  border-radius:999px;
+  font:400 .85rem var(--sans);
+  letter-spacing:.08em;
+  white-space:nowrap;
+}
+
+nav a{
+  color:var(--plata);
+  opacity:.85;
+}
+
+nav a:hover{
+  color:var(--cian);
+  opacity:1;
+}
+
+/* ===== INICIO ===== */
+
+.hero{
+  position:relative;
+  min-height:100vh;
+  padding:5vh 5vw;
+  overflow:hidden;
+}
+
+.frame{
+  position:absolute;
+  inset:3.5vh 2.5vw;
+  border:1px solid rgba(205,188,255,.16);
+  pointer-events:none;
+  z-index:3;
+}
+
+.frame i{
+  position:absolute;
+  width:16px;
+  height:16px;
+  border:1px solid var(--lila);
+}
+
+.frame i:nth-child(1){
+  top:-1px;
+  left:-1px;
+  border-right:0;
+  border-bottom:0;
+}
+
+.frame i:nth-child(2){
+  top:-1px;
+  right:-1px;
+  border-left:0;
+  border-bottom:0;
+}
+
+.frame i:nth-child(3){
+  bottom:-1px;
+  left:-1px;
+  border-right:0;
+  border-top:0;
+}
+
+.frame i:nth-child(4){
+  bottom:-1px;
+  right:-1px;
+  border-left:0;
+  border-top:0;
+}
+
+.stripes{
+  position:absolute;
+  left:5vw;
+  top:11vh;
+  width:64px;
+  height:64px;
+  z-index:4;
+  background:repeating-linear-gradient(-55deg,rgba(205,188,255,.55) 0 1px,transparent 1px 8px);
+}
+
+.clock{
+  position:absolute;
+  right:5vw;
+  top:11vh;
+  z-index:4;
+  padding:.35rem 1rem .35rem 1.7rem;
+  border-radius:999px;
+  font:300 1rem var(--sans);
+  letter-spacing:.14em;
+  font-variant-numeric:tabular-nums;
+}
+
+.clock::after{
+  content:"";
+  position:absolute;
+  left:.85rem;
+  top:50%;
+  width:5px;
+  height:5px;
+  margin-top:-2.5px;
+  border-radius:50%;
+  background:var(--carmesi);
+  box-shadow:0 0 8px var(--carmesi);
+}
+
+.burn{
+  position:absolute;
+  right:5vw;
+  top:17vh;
+  width:66vw;
+  height:68vh;
+  z-index:1;
+  border-radius:26px;
+  border:1px solid rgba(205,188,255,.2);
+  overflow:hidden;
+  background:radial-gradient(circle at 50% 60%,var(--vino2),var(--noche) 78%);
+}
+
+.burn canvas{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  display:block;
+}
+
+#fire{
+ mix-blend-mode: normal;
+  pointer-events:none;
+}
+
+.hint{
+  position:absolute;
+  right:1.2rem;
+  bottom:.9rem;
+  font:300 .75rem var(--sans);
+  letter-spacing:.14em;
+  color:var(--plata);
+  opacity:.6;
+  pointer-events:none;
+}
+
+/* ===== TÍTULO PRINCIPAL ===== */
+
+.plate{
+  position:absolute;
+  left:3.5vw;
+  bottom:10vh;
+  z-index:5;
+  pointer-events:none;
+  padding:1.6rem 3rem 1.3rem;
+  border-radius:28px;
+}
+
+.title{
+  position:relative;
+  display:block;
+  font-family:var(--goth);
+  font-size:clamp(2.3rem,6vw,5.8rem);
+  font-weight:400;
+  line-height:1.5;
+  letter-spacing:.06em;
+  padding-top:.12em;
+  background:linear-gradient(180deg,#fff 20%,var(--lila));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent;
+  filter:drop-shadow(0 0 20px rgba(139,92,255,.5));
+}
+
+.sub{
+  position:relative;
+  margin-top:.5rem;
+  display:flex;
+  align-items:center;
+  font:300 .95rem var(--sans);
+  letter-spacing:.3em;
+  color:var(--plata);
+}
+
+.sep{
+  display:inline-block;
+  width:1px;
+  height:14px;
+  margin:0 1rem;
+  background:var(--lila);
+  opacity:.6;
+}
+
+.swash{
+  position:relative;
+  display:block;
+  width:100%;
+  height:34px;
+  margin-top:.6rem;
+  overflow:visible;
+}
+
+.swash path{
+  fill:none;
+  stroke:var(--lila);
+  stroke-width:1;
+  vector-effect:non-scaling-stroke;
+  opacity:.75;
+}
+
+.swash .d{
+  fill:var(--lila);
+  stroke:none;
+}
+
+.barcode{
+  position:absolute;
+  right:5vw;
+  bottom:6vh;
+  width:140px;
+  height:30px;
+  z-index:4;
+  background:repeating-linear-gradient(90deg,rgba(205,188,255,.6) 0 1px,transparent 1px 4px,rgba(205,188,255,.6) 4px 5px,transparent 5px 9px);
+  opacity:.7;
+}
+
+.rings{
+  position:absolute;
+  right:calc(5vw + 165px);
+  bottom:5.2vh;
+  width:86px;
+  z-index:4;
+  fill:none;
+  stroke:var(--lila);
+  stroke-width:.7;
+  opacity:.6;
+}
+
+.box{
+  position:absolute;
+  left:5vw;
+  top:26vh;
+  width:215px;
+  z-index:4;
+  padding:1rem 1.2rem;
+  border-radius:20px;
+  font-size:1rem;
+  line-height:1.4;
+}
+
+.box b{
+  display:block;
+  font:400 .78rem var(--sans);
+  letter-spacing:.22em;
+  color:var(--lila);
+  margin-bottom:.35rem;
+}
+
+/* ===== SECCIONES ===== */
+
+.sec{
+  padding:14vh 6vw 6vh;
+  position:relative;
+}
+
+.sec h2{
+  font-family:var(--goth);
+  font-size:clamp(1.8rem,3.5vw,3rem);
+  font-weight:400;
+  line-height:1.4;
+  letter-spacing:.08em;
+  color:#fff;
+  margin-bottom:1.2rem;
+}
+
+.sec h2::after{
+  content:"";
+  display:block;
+  width:90px;
+  height:1px;
+  margin-top:.8rem;
+  background:linear-gradient(90deg,var(--lila),transparent);
+}
+
+.lead{
+  max-width:58ch;
+  margin-bottom:2.2rem;
+  opacity:.85;
+}
+
+/* ===== CARRUSEL DE FOTOGRAFÍA ===== */
+
+.photo-carousel{
+  position:relative;
+  width:100%;
+  max-width:1100px;
+  margin:2rem auto 0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:1rem 3.5rem;
+}
+
+.photo-stage{
+  position:relative;
+  width:100%;
+  height:clamp(340px,48vw,570px);
+  overflow:hidden;
+  perspective:1000px;
+}
+
+.photo-card{
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:clamp(220px,42%,430px);
+  aspect-ratio:4/5;
+  transform:
+    translate(-50%,-50%)
+    translateX(calc(var(--offset, 0) * 115%))
+    scale(var(--scale, 1));
+  opacity:var(--opacity, 0);
+  z-index:var(--layer, 1);
+  cursor:pointer;
+  transition:
+    transform .85s cubic-bezier(.22,.75,.25,1),
+    opacity .7s ease,
+    box-shadow .7s ease,
+    border-color .7s ease;
+  box-shadow:
+    0 0 22px rgba(139,92,255,.13),
+    0 20px 55px rgba(8,2,24,.55);
+}
+/* ===== ESPACIOS VACÍOS RESERVADOS ===== */
+
+.photo-card.is-empty{
+  border:1px dashed rgba(205,188,255,.25);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(210,200,230,.09),
+      rgba(15,8,25,.55),
+      rgba(180,170,205,.06)
+    );
+  box-shadow:
+    inset 0 0 25px rgba(139,92,255,.05),
+    0 20px 55px rgba(8,2,24,.4);
+  cursor:default;
+}
+
+.photo-card.is-empty::before{
+  display:none;
+}
+
+/* ===== GLASS MATE EN FOTOGRAFÍAS LATERALES ===== */
+
+.photo-card{
+  overflow:hidden;
+  border-radius:18px;
+  background:rgba(15,8,25,.35);
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+}
+
+/* Fotografías laterales: desenfoque permanente */
+
+.photo-card:not(.is-center) img{
+  filter:blur(8px) saturate(.75);
+  transform:scale(1.08);
+  opacity:.72;
+}
+
+/* Capa de vidrio mate */
+
+.photo-card:not(.is-center)::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(210,200,230,.20),
+      rgba(15,8,25,.48),
+      rgba(180,170,205,.12)
+    );
+  opacity:1;
+  transition:opacity .85s ease;
+}
+
+/* Fotografía central: completamente nítida */
+
+.photo-card.is-center img{
+  filter:blur(0);
+  transform:scale(1);
+  opacity:1;
+}
+
+/* Retirar el vidrio cuando llega al centro */
+
+.photo-card.is-center::after{
+  opacity:0;
+}
+
+/* Transición entre ambos estados */
+
+.photo-card img{
+  transition:
+    filter .85s ease,
+    transform .85s ease,
+    opacity .85s ease;
+}
+
+
+.photo-card img{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  border-radius:inherit;
+  z-index:1;
+}
+
+.photo-card.is-center{
+  border-color:rgba(205,188,255,.65);
+  box-shadow:
+    0 0 18px rgba(139,92,255,.35),
+    0 0 45px rgba(139,92,255,.2),
+    0 24px 65px rgba(8,2,24,.65);
+}
+
+.photo-card:not(.is-center):hover{
+  border-color:rgba(205,188,255,.5);
+}
+
+.photo-card.is-center:hover{
+  box-shadow:
+    0 0 25px rgba(139,92,255,.5),
+    0 0 55px rgba(139,92,255,.28),
+    0 24px 65px rgba(8,2,24,.65);
+}
+
+/* ===== FLECHAS DEL CARRUSEL ===== */
+
+.carousel-arrow{
+  position:absolute;
+  top:50%;
+  transform:translateY(-50%);
+  z-index:10;
+  width:44px;
+  height:44px;
+  border-radius:50%;
+  border:1px solid rgba(205,188,255,.35);
+  color:var(--lila);
+  background:rgba(20,8,35,.65);
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+  font-size:1.15rem;
+  cursor:pointer;
+  transition:background .3s,box-shadow .3s,transform .3s;
+}
+
+.carousel-arrow:hover{
+  background:rgba(139,92,255,.25);
+  box-shadow:0 0 22px rgba(139,92,255,.4);
+}
+
+.carousel-arrow.prev{
+  left:0;
+}
+
+.carousel-arrow.next{
+  right:0;
+}
+
+.carousel-arrow:active{
+  transform:translateY(-50%) scale(.92);
+}
+
+/* ===== VENTANA AMPLIADA ===== */
+
+.photo-lightbox{
+  position:fixed;
+  inset:0;
+  z-index:200;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:4vh 5vw;
+  background:rgba(5,2,14,.86);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  opacity:0;
+  visibility:hidden;
+  pointer-events:none;
+  transition:opacity .4s ease,visibility .4s ease;
+}
+
+.photo-lightbox.active{
+  opacity:1;
+  visibility:visible;
+  pointer-events:auto;
+}
+
+.lightbox-panel{
+  position:relative;
+  width:min(850px,100%);
+  max-height:92vh;
+  padding:1.2rem;
+  border:1px solid rgba(205,188,255,.3);
+  border-radius:24px;
+  background:linear-gradient(140deg,rgba(255,255,255,.12),rgba(30,10,48,.8));
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.1),
+    0 0 35px rgba(139,92,255,.2),
+    0 25px 80px rgba(0,0,0,.65);
+  transform:translateY(18px) scale(.97);
+  transition:transform .4s cubic-bezier(.22,.75,.25,1);
+}
+
+.photo-lightbox.active .lightbox-panel{
+  transform:translateY(0) scale(1);
+}
+
+.lightbox-image{
+  width:100%;
+  height:min(68vh,650px);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  border-radius:15px;
+  background:rgba(0,0,0,.2);
+}
+
+.lightbox-image img{
+  display:block;
+  max-width:100%;
+  max-height:100%;
+  object-fit:contain;
+  border-radius:12px;
+  box-shadow:0 0 30px rgba(139,92,255,.12);
+}
+
+.lightbox-caption{
+  padding:1.1rem .5rem .3rem;
+  text-align:center;
+}
+
+.caption-line{
+  display:block;
+  width:65px;
+  height:1px;
+  margin:0 auto .8rem;
+  background:linear-gradient(90deg,transparent,var(--lila),transparent);
+}
+
+.lightbox-caption h3{
+  font-family:var(--goth);
+  font-size:1.5rem;
+  font-weight:400;
+  letter-spacing:.08em;
+  color:#fff;
+  text-shadow:0 0 15px rgba(139,92,255,.35);
+}
+
+.lightbox-close{
+  position:absolute;
+  top:-15px;
+  right:-15px;
+  z-index:5;
+  width:38px;
+  height:38px;
+  border:1px solid rgba(205,188,255,.5);
+  border-radius:50%;
+  background:#170d25;
+  color:var(--lila);
+  font-size:1.7rem;
+  line-height:1;
+  cursor:pointer;
+  box-shadow:0 0 18px rgba(139,92,255,.3);
+  transition:background .3s,transform .3s;
+}
+
+.lightbox-close:hover{
+  background:#48245e;
+  transform:rotate(90deg);
+}
+
 /* ===== VIDEOS ===== */
 
 .vids{
@@ -708,6 +1396,480 @@ nav a:hover{
   border:0;
   z-index:1;
 }
+
+/* ===== PIE DE PÁGINA ===== */
+
+footer{
+  padding:6vh 6vw;
+  text-align:center;
+  font:300 .85rem var(--sans);
+  letter-spacing:.35em;
+  color:var(--lila);
+}
+
+/* ===== CELULAR ===== */
+
+@media(max-width:800px){
+
+  nav{
+    gap:.8rem;
+    padding:.55rem 1rem;
+    font-size:.7rem;
+    letter-spacing:.04em;
+  }
+
+  .burn{
+    left:5vw;
+    right:5vw;
+    width:auto;
+    top:16vh;
+    height:56vh;
+  }
+
+  .box,.rings,.stripes{
+    display:none;
+  }
+
+  .plate{
+    left:4vw;
+    right:4vw;
+    bottom:8vh;
+    padding:1.2rem 1.4rem 1rem;
+  }
+
+  .sub{
+    font-size:.72rem;
+    letter-spacing:.2em;
+  }
+
+  .barcode{
+    display:none;
+  }
+
+  .clock{
+    top:10vh;
+  }
+
+  .photo-carousel{
+    padding:1rem 2.5rem;
+  }
+
+  .photo-stage{
+    height:clamp(300px,100vw,440px);
+  }
+
+  .photo-card{
+    width:65%;
+  }
+
+  .carousel-arrow{
+    width:36px;
+    height:36px;
+    font-size:.95rem;
+  }
+
+  .lightbox-panel{
+    padding:.7rem;
+  }
+
+  .lightbox-image{
+    height:65vh;
+  }
+
+  .lightbox-caption h3{
+    font-size:1.2rem;
+  }
+
+  .lightbox-close{
+    top:-12px;
+    right:-8px;
+  }
+
+}
+
+/* ===== RESPETO AL MOVIMIENTO REDUCIDO ===== */
+
+@media(prefers-reduced-motion:reduce){
+
+  .photo-card,
+  .photo-lightbox,
+  .lightbox-panel,
+  .carousel-arrow{
+    transition:none;
+  }
+
+}
+
+/* ===== CAPAS DEL FONDO Y CONTENIDO ===== */
+.hero,.sec,footer{
+  position:relative;
+  z-index:1;
+}
+
+nav{
+  z-index:50;
+}
+
+.photo-lightbox{
+  z-index:200;
+}
+
+
+
+/* =====================================
+   SOBRE MI — MOONSHINE GLASS
+===================================== */
+
+.about-section {
+  position: relative;
+}
+
+.about-wrap {
+  width: 100%;
+  max-width: 1050px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.about-heading {
+  margin-bottom: 8px;
+}
+
+.about-kicker,
+.about-label {
+  display: block;
+  font-family: var(--sans);
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  color: var(--lila);
+  opacity: 0.85;
+}
+
+.about-heading h2 {
+  margin-top: 12px;
+}
+
+/* RECUADROS */
+
+.about-card {
+  background: rgba(30, 22, 39, 0.72);
+  border: 1px solid rgba(205, 188, 255, 0.16);
+  border-radius: 12px;
+  padding: 27px 30px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+}
+
+/* PRESENTACIÓN */
+
+.about-intro p {
+  max-width: 850px;
+  margin: 17px 0 0;
+  color: var(--plata);
+  font-size: 0.98rem;
+  line-height: 1.9;
+  font-weight: 300;
+}
+
+/* DOS COLUMNAS */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+
+/* LISTAS */
+
+.about-list {
+  list-style: none;
+  padding: 0;
+  margin: 19px 0 0;
+}
+
+.about-list li {
+  color: var(--plata);
+  font-size: 0.91rem;
+  font-weight: 300;
+  line-height: 1.7;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(205, 188, 255, 0.09);
+}
+
+.about-list li:last-child {
+  border-bottom: none;
+}
+
+/* PROYECTOS */
+
+.about-projects {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.about-project {
+  padding: 20px 0;
+  border-bottom: 1px solid rgba(205, 188, 255, 0.13);
+}
+
+.about-project:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.about-project h3 {
+  margin: 0 0 6px;
+  color: var(--plata);
+  font-family: var(--sans);
+  font-size: 1.02rem;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+}
+
+.about-project span {
+  color: var(--lila);
+  font-size: 0.77rem;
+  letter-spacing: 0.06em;
+}
+
+.about-project p {
+  margin: 12px 0 0;
+  max-width: 850px;
+  color: var(--plata);
+  opacity: 0.82;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  font-weight: 300;
+}
+
+/* INTERESES */
+
+.about-interests p {
+  margin: 17px 0 0;
+  color: var(--plata);
+  font-size: 0.91rem;
+  line-height: 1.85;
+  font-weight: 300;
+}
+
+.about-interests p + p {
+  margin-top: 12px;
+}
+
+/* ADAPTACIÓN A MÓVILES */
+
+@media (max-width: 650px) {
+
+  .about-wrap {
+    gap: 14px;
+  }
+
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .about-card {
+    padding: 22px 20px;
+    border-radius: 10px;
+  }
+
+  .about-intro p,
+  .about-interests p {
+    font-size: 0.88rem;
+    line-height: 1.8;
+  }
+
+  .about-project p {
+    font-size: 0.85rem;
+  }
+
+}
+
+
+@media(max-width:800px){
+  #cosmicFace{opacity:.9;}
+}
+
+/* =====================================================
+   REPRODUCTOR MUSICAL MOONSHINE
+===================================================== */
+
+.moon-player{
+  position:relative;
+  z-index:2;
+  width:min(680px, 88%);
+  margin:0 auto;
+  padding:22px 0 30px;
+  display:grid;
+  grid-template-columns:auto 38px 1fr 90px;
+  align-items:center;
+  gap:18px;
+  border-top:1px solid rgba(205,188,255,.13);
+}
+
+.music-info{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+  min-width:0;
+}
+
+.music-label{
+  font:400 .58rem var(--sans);
+  letter-spacing:.2em;
+  color:var(--lila);
+  opacity:.65;
+}
+
+.music-title{
+  font:300 .85rem var(--sans);
+  letter-spacing:.08em;
+  color:var(--plata);
+  white-space:nowrap;
+}
+
+#musicToggle{
+  width:34px;
+  height:34px;
+  border:1px solid rgba(205,188,255,.3);
+  border-radius:50%;
+  background:rgba(139,92,255,.08);
+  color:var(--lila);
+  font-size:.8rem;
+  cursor:pointer;
+  transition:.3s ease;
+}
+
+#musicToggle:hover{
+  background:rgba(139,92,255,.2);
+  box-shadow:0 0 16px rgba(139,92,255,.3);
+}
+
+.music-progress,
+.music-volume{
+  appearance:none;
+  -webkit-appearance:none;
+  height:2px;
+  border-radius:10px;
+  outline:none;
+  cursor:pointer;
+}
+
+.music-progress{
+  width:100%;
+  background:linear-gradient(
+    to right,
+    var(--lila) 0 var(--progress, 0%),
+    rgba(205,188,255,.18) var(--progress, 0%) 100%
+  );
+  box-shadow:0 0 7px rgba(205,188,255,.25);
+}
+
+.music-volume{
+  width:100%;
+  background:linear-gradient(
+    to right,
+    var(--lila) 0 var(--volume, 8%),
+    rgba(205,188,255,.18) var(--volume, 8%) 100%
+  );
+}
+
+.music-progress::-webkit-slider-thumb,
+.music-volume::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  width:7px;
+  height:7px;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 8px var(--lila);
+}
+
+.music-progress::-moz-range-thumb,
+.music-volume::-moz-range-thumb{
+  width:7px;
+  height:7px;
+  border:0;
+  border-radius:50%;
+  background:#fff;
+  box-shadow:0 0 8px var(--lila);
+}
+
+@media(max-width:600px){
+
+  .moon-player{
+    width:88%;
+    grid-template-columns:34px 1fr 65px;
+    gap:12px;
+  }
+
+  .music-info{
+    grid-column:1 / -1;
+    margin-bottom:5px;
+  }
+
+  #musicToggle{
+    grid-column:1;
+  }
+
+  .music-progress{
+    grid-column:2;
+  }
+
+  .music-volume{
+    grid-column:3;
+  }
+
+}
+
+/* ===== CONTACTO MOONSHINE ===== */
+
+.contact-section {
+  text-align: center;
+}
+
+.contact-section h2::after {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.contact-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  margin-top: 20px;
+}
+
+.contact-email {
+  font-size: .9rem;
+}
+
+.instagram-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+  font-size: .85rem;
+  letter-spacing: .06em;
+  color: var(--lila);
+  transition: color .3s ease, text-shadow .3s ease;
+}
+
+.instagram-link svg {
+  width: 19px;
+  height: 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.4;
+}
+
+.instagram-link:hover {
+  color: var(--cian);
+  text-shadow: 0 0 10px rgba(39,194,238,.4);
+}
+
 
 /* ===== PIE DE PÁGINA ===== */
 
