@@ -428,6 +428,67 @@ nav a:hover{
     0 20px 55px rgba(8,2,24,.55);
 }
 
+/* ===== GLASS MATE EN FOTOGRAFÍAS LATERALES ===== */
+
+.photo-card{
+  overflow:hidden;
+  border-radius:18px;
+  background:rgba(15,8,25,.35);
+  -webkit-backdrop-filter:none;
+  backdrop-filter:none;
+}
+
+/* Fotografías laterales: desenfoque permanente */
+
+.photo-card:not(.is-center) img{
+  filter:blur(8px) saturate(.75);
+  transform:scale(1.08);
+  opacity:.72;
+}
+
+/* Capa de vidrio mate */
+
+.photo-card:not(.is-center)::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(210,200,230,.20),
+      rgba(15,8,25,.48),
+      rgba(180,170,205,.12)
+    );
+  opacity:1;
+  transition:opacity .85s ease;
+}
+
+/* Fotografía central: completamente nítida */
+
+.photo-card.is-center img{
+  filter:blur(0);
+  transform:scale(1);
+  opacity:1;
+}
+
+/* Retirar el vidrio cuando llega al centro */
+
+.photo-card.is-center::after{
+  opacity:0;
+}
+
+/* Transición entre ambos estados */
+
+.photo-card img{
+  transition:
+    filter .85s ease,
+    transform .85s ease,
+    opacity .85s ease;
+}
+
+
 .photo-card img{
   position:absolute;
   inset:0;
