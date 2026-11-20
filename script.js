@@ -49,7 +49,6 @@ if(!sinMovimiento){
     const a = A.getContext('2d');
     const b = B.getContext('2d');
 
-    /* Máscara independiente */
     const M = document.createElement('canvas');
     const m = M.getContext('2d');
 
@@ -138,26 +137,15 @@ if(!sinMovimiento){
 
       b.clearRect(0, 0, w, h);
 
-      /* Imagen desenfocada debajo del vidrio */
-
       b.save();
-
       b.filter = 'blur(10px)';
-
       dibujarFoto(b);
-
       b.restore();
 
       b.filter = 'none';
 
-
-      /* Fondo negro mate */
-
       b.fillStyle = 'rgba(2,1,5,.70)';
       b.fillRect(0, 0, w, h);
-
-
-      /* Reflejo gris perlado */
 
       const brillo = b.createLinearGradient(0, 0, w, h);
 
@@ -167,9 +155,6 @@ if(!sinMovimiento){
 
       b.fillStyle = brillo;
       b.fillRect(0, 0, w, h);
-
-
-      /* Textura de vapor */
 
       for(let i = 0; i < 22; i++){
 
@@ -269,8 +254,6 @@ if(!sinMovimiento){
 
       m.clearRect(0, 0, w, h);
 
-      /* Revelación global por clic */
-
       let global = 0;
 
       if(inicioClick){
@@ -305,7 +288,7 @@ if(!sinMovimiento){
       }
 
 
-      /* Revelación individual del cursor */
+      /* REVELACIÓN INDIVIDUAL DEL CURSOR */
 
       zonas.forEach(z => {
 
@@ -351,7 +334,7 @@ if(!sinMovimiento){
         m.fill();
 
 
-        /* Bordes irregulares */
+        /* BORDES IRREGULARES */
 
         for(let i = 0; i < 3; i++){
 
@@ -433,12 +416,7 @@ if(!sinMovimiento){
 
       dibujarGlass();
 
-      /* Construir máscara */
-
       dibujarMascara(ahora);
-
-
-      /* Retirar el vidrio donde se ha despejado */
 
       b.save();
 
@@ -446,9 +424,6 @@ if(!sinMovimiento){
       b.drawImage(M, 0, 0, w, h);
 
       b.restore();
-
-
-      /* Las partículas quedan por encima del vidrio */
 
       dibujarParticulas(ahora);
 
@@ -541,8 +516,7 @@ if(!sinMovimiento){
     });
 
 
-    /* ===== CLIC: 5 SEGUNDOS PARA DESPEJAR,
-       15 SEGUNDOS VISIBLE, 5 SEGUNDOS PARA EMPAÑAR ===== */
+    /* ===== CLIC: REVELACIÓN ===== */
 
     function revelarTodo(){
 
@@ -568,9 +542,9 @@ if(!sinMovimiento){
         e.touches[0].clientY
       );
 
-    }, { passive: true });
+    }, { passive:true });
 
-    caja.addEventListener('touchstart', revelarTodo, { passive: true });
+    caja.addEventListener('touchstart', revelarTodo, { passive:true });
 
     ajustar();
 
@@ -588,7 +562,7 @@ if(!sinMovimiento){
   const canvas = $('#cosmicFace');
   if(!canvas) return;
 
-  const ctx = canvas.getContext('2d', { alpha: true });
+  const ctx = canvas.getContext('2d', { alpha:true });
 
   const source = new Image();
   source.src = 'media/rostro-cosmico.png';
@@ -596,9 +570,9 @@ if(!sinMovimiento){
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   const pointer = {
-    x: -10000,
-    y: -10000,
-    active: false
+    x:-10000,
+    y:-10000,
+    active:false
   };
 
   const particles = [];
@@ -617,12 +591,12 @@ if(!sinMovimiento){
   /* ===== CONFIGURACIÓN ===== */
 
   const settings = {
-    sampleStep: 4,
-    maxParticles: 17000,
-    radius: 78,
-    push: 5.8,
-    spring: 0.018,
-    friction: 0.91
+    sampleStep:4,
+    maxParticles:17000,
+    radius:78,
+    push:5.8,
+    spring:.018,
+    friction:.91
   };
 
 
@@ -662,12 +636,12 @@ if(!sinMovimiento){
     const targetWidth = targetHeight * ratio;
 
     layout = {
-      width: targetWidth,
-      height: targetHeight,
+      width:targetWidth,
+      height:targetHeight,
 
-      /* Anclado a la esquina inferior derecha */
-      left: W - targetWidth + targetWidth * .02,
-      top: H - targetHeight + (mobile ? targetHeight * .08 : targetHeight * .02)
+      left:W - targetWidth + targetWidth * .02,
+
+      top:H - targetHeight + (mobile ? targetHeight * .08 : targetHeight * .02)
     };
 
     particles.forEach(p => {
@@ -690,7 +664,7 @@ if(!sinMovimiento){
     off.height = source.naturalHeight;
 
     const offCtx = off.getContext('2d', {
-      willReadFrequently: true
+      willReadFrequently:true
     });
 
     offCtx.drawImage(source, 0, 0);
@@ -719,8 +693,6 @@ if(!sinMovimiento){
 
         const brightness = (r + g + b) / 3;
 
-        /* El umbral descarta el negro y conserva los detalles luminosos */
-
         if(alpha < 30 || brightness < 48) continue;
 
         const ox = x / off.width;
@@ -735,20 +707,20 @@ if(!sinMovimiento){
           ox,
           oy,
 
-          tx: 0,
-          ty: 0,
+          tx:0,
+          ty:0,
 
-          x: 0,
-          y: 0,
+          x:0,
+          y:0,
 
-          vx: 0,
-          vy: 0,
+          vx:0,
+          vy:0,
 
-          size: .45 + Math.random() * 1.05,
-          alpha: .35 + Math.random() * .55,
+          size:.45 + Math.random() * 1.05,
+          alpha:.35 + Math.random() * .55,
 
-          phase: Math.random() * Math.PI * 2,
-          speed: .55 + Math.random() * 1.35,
+          phase:Math.random() * Math.PI * 2,
+          speed:.55 + Math.random() * 1.35,
 
           color
 
@@ -828,16 +800,16 @@ if(!sinMovimiento){
 
       ambientParticles.push({
 
-        x, y,
-        vx, vy,
+        x,y,
+        vx,vy,
 
-        size: .45 + Math.random() * .8,
-        alpha: .18 + Math.random() * .3,
+        size:.45 + Math.random() * .8,
+        alpha:.18 + Math.random() * .3,
 
-        phase: Math.random() * Math.PI * 2,
+        phase:Math.random() * Math.PI * 2,
 
-        born: now,
-        life: 18000 + Math.random() * 12000
+        born:now,
+        life:18000 + Math.random() * 12000
 
       });
 
@@ -923,8 +895,6 @@ if(!sinMovimiento){
     ctx.globalCompositeOperation = 'lighter';
 
 
-    /* Partículas ambientales */
-
     if(!reduceMotion){
 
       emitAmbientParticles(now);
@@ -943,7 +913,7 @@ if(!sinMovimiento){
       let ay = (p.ty - p.y) * settings.spring;
 
 
-      /* Repulsión del cursor */
+      /* REPULSIÓN DEL CURSOR */
 
       if(pointer.active){
 
@@ -967,7 +937,7 @@ if(!sinMovimiento){
       }
 
 
-      /* Pequeña deriva orgánica */
+      /* DERIVA ORGÁNICA */
 
       const shimmer = Math.sin(now * .0011 * p.speed + p.phase);
 
@@ -975,7 +945,7 @@ if(!sinMovimiento){
       ay += Math.cos(now * .00032 + p.phase) * .006;
 
 
-      /* Movimiento y retorno a la posición original */
+      /* MOVIMIENTO Y RETORNO */
 
       p.vx = (p.vx + ax * dt) * Math.pow(settings.friction, dt);
       p.vy = (p.vy + ay * dt) * Math.pow(settings.friction, dt);
@@ -984,7 +954,7 @@ if(!sinMovimiento){
       p.y += p.vy * dt;
 
 
-      /* Brillo */
+      /* BRILLO */
 
       const twinkle = .68 + (shimmer + 1) * .16;
 
@@ -1002,7 +972,7 @@ if(!sinMovimiento){
       ctx.fill();
 
 
-      /* Destellos de cuatro puntas */
+      /* DESTELLOS DE CUATRO PUNTAS */
 
       if(shimmer > .94 && p.size > .9){
 
@@ -1073,7 +1043,7 @@ if(!sinMovimiento){
   window.addEventListener(
     'pointermove',
     onPointerMove,
-    { passive: true }
+    { passive:true }
   );
 
   window.addEventListener('pointerleave', onPointerLeave);
@@ -1088,7 +1058,11 @@ if(!sinMovimiento){
    CARRUSEL MOONSHINE
 ===================================================== */
 
-const photoCards = [...document.querySelectorAll('.photo-card')];
+/* Solo se incluyen las tarjetas que ya tienen fotografía. */
+
+const photoCards = [
+  ...document.querySelectorAll('.photo-card:not(.is-empty)')
+];
 
 const photoPrev = $('#photoPrev');
 const photoNext = $('#photoNext');
@@ -1175,8 +1149,7 @@ function restartPhotoTimer(){
 
   if(
     !sinMovimiento &&
-    lightbox &&
-    !lightbox.classList.contains('active')
+    (!lightbox || !lightbox.classList.contains('active'))
   ){
 
     photoTimer = setInterval(() => {
@@ -1288,7 +1261,9 @@ document.addEventListener('keydown', e => {
 
 /* ===== INICIAR CARRUSEL ===== */
 
-if(photoCards.length && lightbox){
+/* Ya no depende de que exista la ventana ampliada. */
+
+if(photoCards.length){
 
   renderCarousel();
   restartPhotoTimer();
@@ -1299,7 +1274,6 @@ if(photoCards.length && lightbox){
 
 /* =====================================================
    PARTÍCULAS AMBIENTALES INDEPENDIENTES
-   Capa propia para todo MoonShine
 ===================================================== */
 
 (() => {
@@ -1312,13 +1286,13 @@ if(photoCards.length && lightbox){
   canvas.id = 'ambientParticles';
 
   Object.assign(canvas.style, {
-    position: 'fixed',
-    inset: '0',
-    width: '100%',
-    height: '100%',
-    pointerEvents: 'none',
-    zIndex: '0',
-    opacity: '1'
+    position:'fixed',
+    inset:'0',
+    width:'100%',
+    height:'100%',
+    pointerEvents:'none',
+    zIndex:'0',
+    opacity:'1'
   });
 
   document.body.appendChild(canvas);
@@ -1357,19 +1331,19 @@ if(photoCards.length && lightbox){
 
     return {
 
-      x: Math.random() * W,
-      y: Math.random() * H,
+      x:Math.random() * W,
+      y:Math.random() * H,
 
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed,
+      vx:Math.cos(angle) * speed,
+      vy:Math.sin(angle) * speed,
 
-      size: .5 + Math.random() * 1.3,
+      size:.5 + Math.random() * 1.3,
 
-      alpha: .15 + Math.random() * .38,
+      alpha:.15 + Math.random() * .38,
 
-      phase: Math.random() * Math.PI * 2,
+      phase:Math.random() * Math.PI * 2,
 
-      drift: .15 + Math.random() * .35
+      drift:.15 + Math.random() * .35
 
     };
 
@@ -1400,18 +1374,12 @@ if(photoCards.length && lightbox){
 
     for(const p of particles){
 
-      /* Movimiento independiente */
-
       p.x += p.vx * dt;
       p.y += p.vy * dt;
-
-      /* Leve movimiento orgánico */
 
       p.x += Math.sin(now * .0003 + p.phase) * p.drift * .025;
       p.y += Math.cos(now * .00025 + p.phase) * p.drift * .025;
 
-
-      /* Reaparecer al salir de pantalla */
 
       if(
         p.x < -10 || p.x > W + 10 ||
@@ -1422,8 +1390,6 @@ if(photoCards.length && lightbox){
 
       }
 
-
-      /* Brillo sutil */
 
       const shimmer =
         .65 + Math.sin(now * .001 + p.phase) * .35;
@@ -1443,13 +1409,14 @@ if(photoCards.length && lightbox){
 
     ctx.globalAlpha = 1;
     ctx.shadowBlur = 0;
+
     requestAnimationFrame(animate);
 
   }
 
   window.addEventListener('resize', resize);
+
   resize();
-   
 
   requestAnimationFrame(animate);
 
@@ -1472,17 +1439,22 @@ if(photoCards.length && lightbox){
   audio.volume = 0.08;
   audio.loop = true;
 
+
   function actualizarBoton(){
+
     const reproduciendo = !audio.paused;
 
     toggle.textContent = reproduciendo ? 'Ⅱ' : '▶';
+
     toggle.setAttribute(
       'aria-label',
       reproduciendo ? 'Pausar música' : 'Reproducir música'
     );
+
   }
 
-  /* Intentar reproducir al entrar */
+
+  /* INTENTAR REPRODUCIR AL ENTRAR */
 
   audio.play()
     .then(actualizarBoton)
@@ -1490,7 +1462,8 @@ if(photoCards.length && lightbox){
       actualizarBoton();
     });
 
-  /* Reproducir / pausar */
+
+  /* REPRODUCIR / PAUSAR */
 
   toggle.addEventListener('click', () => {
 
@@ -1505,7 +1478,8 @@ if(photoCards.length && lightbox){
   audio.addEventListener('play', actualizarBoton);
   audio.addEventListener('pause', actualizarBoton);
 
-  /* Actualizar barra de progreso */
+
+  /* ACTUALIZAR BARRA DE PROGRESO */
 
   audio.addEventListener('timeupdate', () => {
 
@@ -1520,7 +1494,8 @@ if(photoCards.length && lightbox){
 
   });
 
-  /* Permitir avanzar o retroceder */
+
+  /* PERMITIR AVANZAR O RETROCEDER */
 
   progress.addEventListener('input', () => {
 
@@ -1535,7 +1510,8 @@ if(photoCards.length && lightbox){
 
   });
 
-  /* Control de volumen */
+
+  /* CONTROL DE VOLUMEN */
 
   volume.addEventListener('input', () => {
 
