@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -51,41 +52,52 @@
   </aside>
 </header>
 
-<div class="photo-stage" id="photoStage">
-
-  <figure class="ph photo-card" data-l="foto1" data-title="Guajira - Paisaje">
-    <img src="media/guajira paisaje.avif" alt="Paisaje de La Guajira" loading="lazy">
-  </figure>
-
-  <figure class="ph photo-card" data-l="foto2" data-title="Pride Bandera">
-    <img src="media/pride bandera.avif" alt="Bandera Pride" loading="lazy">
-  </figure>
-
-  <figure class="ph photo-card" data-l="foto3" data-title="Guajira - Paisaje 2">
-    <img src="media/guajira paisaje 2.avif" alt="Paisaje de La Guajira" loading="lazy">
-  </figure>
-
-</div>
 <!-- ============ FOTOGRAFÍA ============ -->
 <section id="fotografia" class="sec">
   <h2>Fotografía</h2>
+
   <div class="photo-carousel">
+
     <button class="carousel-arrow prev" id="photoPrev" aria-label="Fotografía anterior">&#10094;</button>
+
     <div class="photo-stage" id="photoStage">
-      <figure class="ph photo-card" data-l="foto1" data-title="Fotografía 1"><img src="media/foto1.jpg" alt="Fotografía 1" loading="lazy"></figure>
-      <figure class="ph photo-card" data-l="foto2" data-title="Fotografía 2"><img src="media/foto2.jpg" alt="Fotografía 2" loading="lazy"></figure>
-      <figure class="ph photo-card" data-l="foto3" data-title="Fotografía 3"><img src="media/foto3.jpg" alt="Fotografía 3" loading="lazy"></figure>
-      <figure class="ph photo-card" data-l="foto4" data-title="Fotografía 4"><img src="media/foto4.jpg" alt="Fotografía 4" loading="lazy"></figure>
-      <figure class="ph photo-card" data-l="foto5" data-title="Fotografía 5"><img src="media/foto5.jpg" alt="Fotografía 5" loading="lazy"></figure>
-      <figure class="ph photo-card" data-l="foto6" data-title="Fotografía 6"><img src="media/foto6.jpg" alt="Fotografía 6" loading="lazy"></figure>
-      <figure class="ph photo-card" data-l="foto7" data-title="Fotografía 7"><img src="media/foto7.jpg" alt="Fotografía 7" loading="lazy"></figure>
-      <figure class="ph photo-card" data-l="foto8" data-title="Fotografía 8"><img src="media/foto8.jpg" alt="Fotografía 8" loading="lazy"></figure>
+
+      <!-- FOTOGRAFÍA 1 -->
+      <figure class="ph photo-card" data-l="foto1" data-title="Guajira - Paisaje">
+        <img src="media/guajira paisaje.avif" alt="Paisaje de La Guajira" loading="lazy">
+      </figure>
+
+      <!-- FOTOGRAFÍA 2 -->
+      <figure class="ph photo-card" data-l="foto2" data-title="Pride Bandera">
+        <img src="media/pride bandera.avif" alt="Bandera Pride" loading="lazy">
+      </figure>
+
+      <!-- FOTOGRAFÍA 3 -->
+      <figure class="ph photo-card" data-l="foto3" data-title="Guajira - Paisaje 2">
+        <img src="media/guajira paisaje 2.avif" alt="Paisaje de La Guajira" loading="lazy">
+      </figure>
+
     </div>
+
     <button class="carousel-arrow next" id="photoNext" aria-label="Fotografía siguiente">&#10095;</button>
+
   </div>
 </section>
 
-  
+<!-- ============ VENTANA DE FOTOGRAFÍA ============ -->
+<div class="photo-lightbox" id="photoLightbox" aria-hidden="true">
+  <div class="lightbox-panel">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Cerrar">&times;</button>
+    <div class="lightbox-image">
+      <img id="lightboxImg" src="" alt="">
+    </div>
+    <div class="lightbox-caption">
+      <span class="caption-line"></span>
+      <h3 id="lightboxTitle">Título de la fotografía</h3>
+    </div>
+  </div>
+</div>
+
 <!-- ============ VIDEOS ============ -->
 <section id="videos" class="sec">
   <h2>Videos</h2>
@@ -95,7 +107,7 @@
   </div>
 </section>
 
-
+<!-- ============ SOBRE MÍ ============ -->
 <section id="sobre-mi" class="sec about-section">
 
   <div class="about-wrap">
@@ -208,8 +220,6 @@
   </div>
 </section>
 
-
-
 <!-- ============ CONTACTO ============ -->
 <section id="contacto" class="sec contact-section">
 
@@ -241,8 +251,6 @@
   </div>
 
 </section>
-
-
 
 <!-- ============ REPRODUCTOR MUSICAL ============ -->
 <div class="moon-player">
@@ -285,4 +293,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
