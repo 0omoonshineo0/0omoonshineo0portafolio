@@ -427,6 +427,26 @@ nav a:hover{
     0 0 22px rgba(139,92,255,.13),
     0 20px 55px rgba(8,2,24,.55);
 }
+/* ===== ESPACIOS VACÍOS RESERVADOS ===== */
+
+.photo-card.is-empty{
+  border:1px dashed rgba(205,188,255,.25);
+  background:
+    linear-gradient(
+      145deg,
+      rgba(210,200,230,.09),
+      rgba(15,8,25,.55),
+      rgba(180,170,205,.06)
+    );
+  box-shadow:
+    inset 0 0 25px rgba(139,92,255,.05),
+    0 20px 55px rgba(8,2,24,.4);
+  cursor:default;
+}
+
+.photo-card.is-empty::before{
+  display:none;
+}
 
 /* ===== GLASS MATE EN FOTOGRAFÍAS LATERALES ===== */
 
