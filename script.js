@@ -20,8 +20,10 @@ setInterval(hora, 20000);
 
 
 
+
 /* =====================================================
    CARRUSEL DE VIDEOS MOONSHINE
+   VIMEO + YOUTUBE
 ===================================================== */
 
 (() => {
@@ -37,11 +39,20 @@ setInterval(hora, 20000);
 
   espacios.forEach((card, index) => {
 
-    const id = (card.dataset.vimeo || '').trim();
+    const vimeo = (card.dataset.vimeo || '').trim();
+    const youtube = (card.dataset.youtube || '').trim();
+
+    let url = '';
+
+    if(/^\d+$/.test(vimeo)){
+      url = `https://player.vimeo.com/video/${vimeo}`;
+    }else if(/^[a-zA-Z0-9_-]{11}$/.test(youtube)){
+      url = `https://www.youtube-nocookie.com/embed/${youtube}`;
+    }
 
     card.classList.remove('is-centered');
 
-    if(!/^\d+$/.test(id)){
+    if(!url){
       card.hidden = true;
       card.style.display = 'none';
       return;
@@ -57,10 +68,9 @@ setInterval(hora, 20000);
       card.appendChild(iframe);
     }
 
-    iframe.src = `https://player.vimeo.com/video/${id}?title=0&byline=0&portrait=0`;
-
+    iframe.src = url;
     iframe.title = `Video MoonShine ${index + 1}`;
-    iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture; encrypted-media';
     iframe.allowFullscreen = true;
     iframe.loading = index < 2 ? 'eager' : 'lazy';
     iframe.referrerPolicy = 'strict-origin-when-cross-origin';
@@ -83,9 +93,7 @@ setInterval(hora, 20000);
 
     pagina = Math.max(0, Math.min(pagina, totalPaginas - 1));
 
-    videos.forEach(video => {
-      video.classList.remove('is-centered');
-    });
+    videos.forEach(video => video.classList.remove('is-centered'));
 
     const esUnico = videos.length === 1;
 
@@ -122,7 +130,8 @@ setInterval(hora, 20000);
         ultimo.offsetLeft -
         (viewport.clientWidth - ultimo.getBoundingClientRect().width) / 2;
 
-      track.style.transform = `translateX(-${Math.max(0, desplazamiento)}px)`;
+      track.style.transform =
+        `translateX(-${Math.max(0, desplazamiento)}px)`;
 
       return;
     }
@@ -130,7 +139,8 @@ setInterval(hora, 20000);
     const primerVideo = videos[pagina * videosPorPagina];
 
     if(primerVideo){
-      track.style.transform = `translateX(-${primerVideo.offsetLeft}px)`;
+      track.style.transform =
+        `translateX(-${primerVideo.offsetLeft}px)`;
     }
 
   }
@@ -156,6 +166,7 @@ setInterval(hora, 20000);
   actualizarCarrusel();
 
 })();
+
 /* =====================================================
    VAPOR GLASS MATE + REVELACIÓN CÓSMICA
 ===================================================== */
