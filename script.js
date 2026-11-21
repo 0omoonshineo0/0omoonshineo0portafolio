@@ -1,17 +1,23 @@
 
 const $ = s => document.querySelector(s);
 const sinMovimiento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
 /* =====================================================
    RELOJ
 ===================================================== */
+
 const reloj = $('#clock');
+
 const hora = () => {
   if(reloj){
     reloj.textContent = new Date().toTimeString().slice(0, 5);
   }
 };
+
 hora();
 setInterval(hora, 20000);
+
+
 /* =====================================================
    CARRUSEL DE VIDEOS MOONSHINE
 ===================================================== */
@@ -27,7 +33,7 @@ setInterval(hora, 20000);
   const espacios = [...track.querySelectorAll('.vid')];
   const videos = [];
 
-  /* ===== ACTIVAR VIDEOS CON ENLACE ===== */
+  /* ===== ACTIVAR SOLO LOS VIDEOS CON ENLACE ===== */
 
   espacios.forEach((card, index) => {
 
@@ -39,7 +45,6 @@ setInterval(hora, 20000);
     }
 
     card.hidden = false;
-    card.classList.add('is-active');
 
     let iframe = card.querySelector('iframe');
 
@@ -52,6 +57,7 @@ setInterval(hora, 20000);
       iframe.allow = 'autoplay; fullscreen; picture-in-picture';
       iframe.allowFullscreen = true;
       iframe.loading = 'lazy';
+      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
 
       card.appendChild(iframe);
 
@@ -62,389 +68,6 @@ setInterval(hora, 20000);
   });
 
 
-  /* ===== EFECTO DE CRISTAL EN CADA MARCO ===== */
-
-  if(!sinMovimiento){
-
-    videos.forEach(card => {
-
-      const canvas = document.createElement('canvas');
-
-      canvas.className = 'vid-glass';
-      canvas.setAttribute('aria-hidden', 'true');
-
-      card.appendChild(canvas);
-
-      const ctx = canvas.getContext('2d');
-
-      let W = 0;
-      let H = 0;
-      let dpr = 1;
-
-      let zonas = [];
-      let particulas = [];
-
-      let lx = -999;
-      let ly = -999;
-
-      let animando = false;
-
-
-      /* ===== FIGURA REDONDEADA ===== */
-
-      function roundedRect(context, x, y, width, height, radius){
-
-        const r = Math.min(radius, width / 2, height / 2);
-
-        context.beginPath();
-        context.moveTo(x + r, y);
-        context.lineTo(x + width - r, y);
-        context.quadraticCurveTo(x + width, y, x + width, y + r);
-        context.lineTo(x + width, y + height - r);
-        context.quadraticCurveTo(
-          x + width, y + height,
-          x + width - r, y + height
-        );
-        context.lineTo(x + r, y + height);
-        context.quadraticCurveTo(
-          x, y + height,
-          x, y + height - r
-        );
-        context.lineTo(x, y + r);
-        context.quadraticCurveTo(x, y, x + r, y);
-        context.closePath();
-
-      }
-
-
-      /* ===== AJUSTAR CANVAS ===== */
-
-      function ajustar(){
-
-        const rect = card.getBoundingClientRect();
-
-        W = rect.width;
-        H = rect.height;
-
-        if(!W || !H) return;
-
-        dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-
-        canvas.width = Math.round(W * dpr);
-        canvas.height = Math.round(H * dpr);
-
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-        zonas = [];
-        particulas = [];
-
-        iniciarAnimacion();
-
-      }
-
-
-      /* ===== VIDRIO EMPAÑADO DEL MARCO ===== */
-
-      function dibujarGlass(){
-
-        ctx.clearRect(0, 0, W, H);
-
-        const gradiente = ctx.createLinearGradient(0, 0, W, H);
-
-        gradiente.addColorStop(0, 'rgba(130,230,255,.34)');
-        gradiente.addColorStop(.45, 'rgba(25,115,155,.23)');
-        gradiente.addColorStop(1, 'rgba(2,20,48,.42)');
-
-        ctx.fillStyle = gradiente;
-
-        /* Marco exterior */
-
-        roundedRect(ctx, 0, 0, W, H, 21);
-
-        /* Hueco central: deja libre el reproductor */
-
-        roundedRect(
-          ctx,
-          10, 10,
-          W - 20, H - 20,
-          13
-        );
-
-        ctx.fill('evenodd');
-
-
-        /* Bruma suave */
-
-        ctx.save();
-
-        ctx.globalCompositeOperation = 'source-atop';
-
-        for(let i = 0; i < 12; i++){
-
-          const x = (i * 73.7) % W;
-          const y = (i * 41.3) % H;
-          const radio = 15 + (i % 4) * 8;
-
-          const nube = ctx.createRadialGradient(
-            x, y, 0,
-            x, y, radio
-          );
-
-          nube.addColorStop(0, 'rgba(190,245,255,.23)');
-          nube.addColorStop(.6, 'rgba(70,180,220,.09)');
-          nube.addColorStop(1, 'rgba(30,120,180,0)');
-
-          ctx.fillStyle = nube;
-          ctx.beginPath();
-          ctx.arc(x, y, radio, 0, Math.PI * 2);
-          ctx.fill();
-
-        }
-
-        ctx.restore();
-
-
-        /* Desempañado local */
-
-        ctx.save();
-        ctx.globalCompositeOperation = 'destination-out';
-
-        zonas.forEach(z => {
-
-          const edad = performance.now() - z.t;
-
-          const fuerza = edad < 180
-            ? edad / 180
-            : Math.max(0, 1 - (edad - 180) / 1900);
-
-          if(fuerza <= 0) return;
-
-          const radio = 34;
-
-          const grad = ctx.createRadialGradient(
-            z.x, z.y, 0,
-            z.x, z.y, radio
-          );
-
-          grad.addColorStop(0, `rgba(255,255,255,${fuerza})`);
-          grad.addColorStop(.55, `rgba(255,255,255,${fuerza * .85})`);
-          grad.addColorStop(1, 'rgba(255,255,255,0)');
-
-          ctx.fillStyle = grad;
-          ctx.beginPath();
-          ctx.arc(z.x, z.y, radio, 0, Math.PI * 2);
-          ctx.fill();
-
-        });
-
-        ctx.restore();
-
-      }
-
-
-      /* ===== ESTRELLAS DE CUATRO PUNTAS ===== */
-
-      function estrella(x, y, s){
-
-        ctx.beginPath();
-
-        ctx.moveTo(x, y - s * 2);
-        ctx.quadraticCurveTo(x + s * .25, y - s * .25, x + s * 2, y);
-        ctx.quadraticCurveTo(x + s * .25, y + s * .25, x, y + s * 2);
-        ctx.quadraticCurveTo(x - s * .25, y + s * .25, x - s * 2, y);
-        ctx.quadraticCurveTo(x - s * .25, y - s * .25, x, y - s * 2);
-
-        ctx.closePath();
-        ctx.fill();
-
-      }
-
-
-      /* ===== POLVO ESTELAR ===== */
-
-      function emitir(x, y, cantidad = 2){
-
-        for(let i = 0; i < cantidad; i++){
-
-          const angulo = Math.random() * Math.PI * 2;
-          const velocidad = .2 + Math.random() * .8;
-
-          particulas.push({
-
-            x: x + (Math.random() - .5) * 8,
-            y: y + (Math.random() - .5) * 8,
-
-            vx: Math.cos(angulo) * velocidad,
-            vy: Math.sin(angulo) * velocidad,
-
-            size: .6 + Math.random() * 1.4,
-            estrella: Math.random() < .45,
-
-            vida: 500 + Math.random() * 650,
-            t: performance.now()
-
-          });
-
-        }
-
-      }
-
-
-      /* ===== DIBUJAR PARTÍCULAS ===== */
-
-      function dibujarParticulas(ahora){
-
-        particulas = particulas.filter(
-          p => ahora - p.t < p.vida
-        );
-
-        particulas.forEach(p => {
-
-          const vida = 1 - (ahora - p.t) / p.vida;
-
-          p.x += p.vx;
-          p.y += p.vy;
-
-          p.vx *= .985;
-          p.vy *= .985;
-
-          ctx.globalAlpha = vida;
-          ctx.fillStyle = '#d9faff';
-          ctx.shadowColor = '#35d8ff';
-          ctx.shadowBlur = 8;
-
-          if(p.estrella){
-
-            estrella(p.x, p.y, p.size);
-
-          }else{
-
-            ctx.beginPath();
-            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
-            ctx.fill();
-
-          }
-
-        });
-
-        ctx.globalAlpha = 1;
-        ctx.shadowBlur = 0;
-
-      }
-
-
-      /* ===== ANIMACIÓN ===== */
-
-      function cuadro(){
-
-        const ahora = performance.now();
-
-        dibujarGlass();
-        dibujarParticulas(ahora);
-
-        zonas = zonas.filter(z => ahora - z.t < 2200);
-
-        if(zonas.length || particulas.length){
-
-          requestAnimationFrame(cuadro);
-
-        }else{
-
-          animando = false;
-
-        }
-
-      }
-
-
-      function iniciarAnimacion(){
-
-        if(animando) return;
-
-        animando = true;
-        requestAnimationFrame(cuadro);
-
-      }
-
-
-      /* ===== SEGUIR EL CURSOR ===== */
-
-     
-function mover(event){
-
-  if(event.pointerType !== 'mouse') return;
-
-  const rect = card.getBoundingClientRect();
-
-  const x = event.clientX - rect.left;
-  const y = event.clientY - rect.top;
-
-  /* Primer movimiento: establecer el punto de inicio */
-
-  if(lx === -999 || ly === -999){
-
-    lx = x;
-    ly = y;
-
-    zonas.push({
-      x,
-      y,
-      t:performance.now()
-    });
-
-    emitir(x, y, 3);
-    iniciarAnimacion();
-
-    return;
-
-  }
-
-  const distancia = Math.hypot(x - lx, y - ly);
-
-  if(distancia > 1){
-
-    const pasos = Math.max(1, Math.ceil(distancia / 5));
-
-    for(let i = 0; i < pasos; i++){
-
-      const t = (i + 1) / pasos;
-
-      const px = lx + (x - lx) * t;
-      const py = ly + (y - ly) * t;
-
-      zonas.push({
-        x:px,
-        y:py,
-        t:performance.now()
-      });
-
-      if(Math.random() < .8){
-        emitir(px, py, 2);
-      }
-
-    }
-
-    lx = x;
-    ly = y;
-
-    iniciarAnimacion();
-
-  }
-
-}
-
-      /* ===== TAMAÑO RESPONSIVE ===== */
-
-      const observer = new ResizeObserver(ajustar);
-      observer.observe(card);
-
-      ajustar();
-
-    });
-
-  }
-
-
   /* ===== NAVEGACIÓN POR PAREJAS ===== */
 
   let pagina = 0;
@@ -453,32 +76,55 @@ function mover(event){
 
     const totalPaginas = Math.ceil(videos.length / 2);
 
-    track.classList.toggle('is-single', videos.length === 1);
+    const ultimaPaginaIndividual =
+      videos.length > 2 &&
+      videos.length % 2 !== 0 &&
+      pagina === totalPaginas - 1;
 
-    prev.hidden = false;
-    next.hidden = false;
+    track.classList.toggle(
+      'is-single',
+      videos.length === 1
+    );
+
+    track.classList.toggle(
+      'is-last-single',
+      ultimaPaginaIndividual
+    );
+
+    /* Ocultar flechas cuando no hay más parejas */
+
+    prev.hidden = videos.length <= 2;
+    next.hidden = videos.length <= 2;
 
     prev.disabled = pagina === 0;
     next.disabled = pagina >= totalPaginas - 1;
 
-    if(videos.length <= 1){
+    /* Un solo video o última página individual */
+
+    if(videos.length <= 2 || ultimaPaginaIndividual){
 
       track.style.transform = 'translateX(0)';
       return;
 
     }
 
+    /* Desplazar hasta la primera tarjeta de la pareja */
+
     const primerVideo = videos[pagina * 2];
 
     if(primerVideo){
 
+      const desplazamiento = primerVideo.offsetLeft;
+
       track.style.transform =
-        `translateX(-${primerVideo.offsetLeft}px)`;
+        `translateX(-${desplazamiento}px)`;
 
     }
 
   }
 
+
+  /* ===== BOTÓN ANTERIOR ===== */
 
   prev.addEventListener('click', () => {
 
@@ -491,6 +137,8 @@ function mover(event){
 
   });
 
+
+  /* ===== BOTÓN SIGUIENTE ===== */
 
   next.addEventListener('click', () => {
 
@@ -506,14 +154,19 @@ function mover(event){
   });
 
 
+  /* ===== AJUSTAR AL CAMBIAR EL TAMAÑO ===== */
+
   window.addEventListener('resize', actualizarCarrusel);
 
   actualizarCarrusel();
 
 })();
+
+
 /* =====================================================
    VAPOR GLASS MATE + REVELACIÓN CÓSMICA
 ===================================================== */
+
 if(!sinMovimiento){
 
   const caja = $('#burn');
@@ -569,6 +222,7 @@ if(!sinMovimiento){
 
     }
 
+
     function ajustar(){
 
       w = caja.clientWidth;
@@ -592,6 +246,7 @@ if(!sinMovimiento){
       iniciarAnimacion();
 
     }
+
 
     img.onload = () => {
       listo = true;
@@ -655,6 +310,7 @@ if(!sinMovimiento){
 
     }
 
+
     /* ===== DESPEJE LOCAL DEL CURSOR ===== */
 
     function despejar(px, py){
@@ -666,6 +322,7 @@ if(!sinMovimiento){
       });
 
     }
+
 
     /* ===== POLVO ESTELAR ===== */
 
@@ -697,6 +354,7 @@ if(!sinMovimiento){
       }
 
     }
+
 
     /* ===== ESTRELLAS DE CUATRO PUNTAS ===== */
 
@@ -1526,7 +1184,7 @@ if(!sinMovimiento){
 
 
 /* =====================================================
-   CARRUSEL MOONSHINE
+   CARRUSEL DE FOTOGRAFÍAS MOONSHINE
 ===================================================== */
 
 /* Solo se incluyen las tarjetas que ya tienen fotografía. */
@@ -1732,15 +1390,12 @@ document.addEventListener('keydown', e => {
 
 /* ===== INICIAR CARRUSEL ===== */
 
-/* Ya no depende de que exista la ventana ampliada. */
-
 if(photoCards.length){
 
   renderCarousel();
   restartPhotoTimer();
 
 }
-
 
 
 /* =====================================================
