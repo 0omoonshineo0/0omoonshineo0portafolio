@@ -17,10 +17,6 @@ const hora = () => {
 hora();
 setInterval(hora, 20000);
 
-
-
-
-
 /* =====================================================
    CARRUSEL DE VIDEOS MOONSHINE
    VIMEO + YOUTUBE
