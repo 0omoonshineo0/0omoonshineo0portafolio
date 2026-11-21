@@ -13,18 +13,113 @@ const hora = () => {
 hora();
 setInterval(hora, 20000);
 /* =====================================================
-   VIDEOS DE VIMEO
+   CARRUSEL DE VIDEOS MOONSHINE
 ===================================================== */
 
-document.querySelectorAll('.vid').forEach(v => {
+(() => {
 
-  const id = (v.dataset.vimeo || '').trim();
+  const track = $('#videoTrack');
+  const prev = $('#videoPrev');
+  const next = $('#videoNext');
 
-  if(id){
-    v.innerHTML = `<iframe src="https://player.vimeo.com/video/${id}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>`;
+  if(!track || !prev || !next) return;
+
+  const espacios = [...track.querySelectorAll('.vid')];
+  const videos = [];
+
+  // Activar únicamente los espacios que tienen un ID de Vimeo
+  espacios.forEach((card, index) => {
+
+    const id = (card.dataset.vimeo || '').trim();
+
+    if(!id){
+      card.hidden = true;
+      return;
+    }
+
+    card.hidden = false;
+    card.classList.add('is-active');
+
+    let iframe = card.querySelector('iframe');
+
+    if(!iframe){
+
+      iframe = document.createElement('iframe');
+
+      iframe.src = `https://player.vimeo.com/video/${id}`;
+      iframe.title = `Video ${index + 1}`;
+      iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+      iframe.allowFullscreen = true;
+      iframe.loading = 'lazy';
+
+      card.appendChild(iframe);
+
+    }
+
+    videos.push(card);
+
+  });
+
+
+  let pagina = 0;
+
+  function actualizarCarrusel(){
+
+    const totalPaginas = Math.ceil(videos.length / 2);
+
+    track.classList.toggle('is-single', videos.length === 1);
+
+    // Las flechas permanecen visibles, incluso si están desactivadas
+    prev.hidden = false;
+    next.hidden = false;
+
+    prev.disabled = pagina === 0;
+    next.disabled = pagina >= totalPaginas - 1;
+
+    if(videos.length <= 1){
+
+      track.style.transform = 'translateX(0)';
+      return;
+
+    }
+
+    const primerVideo = videos[pagina * 2];
+
+    if(primerVideo){
+      track.style.transform =
+        `translateX(-${primerVideo.offsetLeft}px)`;
+    }
+
   }
 
-});
+
+  prev.addEventListener('click', () => {
+
+    if(pagina > 0){
+      pagina--;
+      actualizarCarrusel();
+    }
+
+  });
+
+
+  next.addEventListener('click', () => {
+
+    const totalPaginas = Math.ceil(videos.length / 2);
+
+    if(pagina < totalPaginas - 1){
+      pagina++;
+      actualizarCarrusel();
+    }
+
+  });
+
+
+  window.addEventListener('resize', actualizarCarrusel);
+
+  actualizarCarrusel();
+
+})();
 /* =====================================================
    VAPOR GLASS MATE + REVELACIÓN CÓSMICA
 ===================================================== */
