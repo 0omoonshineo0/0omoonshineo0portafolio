@@ -19,6 +19,7 @@ setInterval(hora, 20000);
 
 
 
+
 /* =====================================================
    CARRUSEL DE VIDEOS MOONSHINE
 ===================================================== */
@@ -34,63 +35,53 @@ setInterval(hora, 20000);
   const espacios = [...track.querySelectorAll('.vid')];
   const videos = [];
 
-  /* ===== ACTIVAR SOLO LOS VIDEOS CON ENLACE ===== */
-
   espacios.forEach((card, index) => {
 
     const id = (card.dataset.vimeo || '').trim();
 
     card.classList.remove('is-centered');
 
-    if(!id){
+    if(!/^\d+$/.test(id)){
       card.hidden = true;
+      card.style.display = 'none';
       return;
     }
 
     card.hidden = false;
+    card.style.display = '';
 
     let iframe = card.querySelector('iframe');
 
     if(!iframe){
-
       iframe = document.createElement('iframe');
-
-      iframe.src = `https://player.vimeo.com/video/${id}`;
-      iframe.title = `Video ${index + 1}`;
-      iframe.allow = 'autoplay; fullscreen; picture-in-picture';
-      iframe.allowFullscreen = true;
-      iframe.loading = 'lazy';
-      iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-
       card.appendChild(iframe);
-
     }
+
+    iframe.src = `https://player.vimeo.com/video/${id}?title=0&byline=0&portrait=0`;
+
+    iframe.title = `Video MoonShine ${index + 1}`;
+    iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+    iframe.allowFullscreen = true;
+    iframe.loading = index < 2 ? 'eager' : 'lazy';
+    iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+
+    iframe.style.display = 'block';
+    iframe.style.width = '100%';
+    iframe.style.height = '100%';
+    iframe.style.border = '0';
 
     videos.push(card);
 
   });
 
-
-  /* ===== ESTADO DEL CARRUSEL ===== */
-
   let pagina = 0;
-
   const videosPorPagina = 2;
 
   function actualizarCarrusel(){
 
-    const totalPaginas = Math.ceil(
-      videos.length / videosPorPagina
-    );
+    const totalPaginas = Math.ceil(videos.length / videosPorPagina);
 
-    /* Evitar páginas fuera de rango */
-
-    pagina = Math.max(
-      0,
-      Math.min(pagina, totalPaginas - 1)
-    );
-
-    /* Limpiar centrado anterior */
+    pagina = Math.max(0, Math.min(pagina, totalPaginas - 1));
 
     videos.forEach(video => {
       video.classList.remove('is-centered');
@@ -105,17 +96,9 @@ setInterval(hora, 20000);
 
     track.classList.toggle('is-single', esUnico);
 
-    /* ===== CENTRAR EL ÚLTIMO VIDEO SI QUEDA SOLO ===== */
-
     if(ultimaPaginaIndividual){
-
-      const ultimoVideo = videos[videos.length - 1];
-
-      ultimoVideo.classList.add('is-centered');
-
+      videos[videos.length - 1].classList.add('is-centered');
     }
-
-    /* ===== FLECHAS ===== */
 
     const mostrarFlechas = videos.length > 2;
 
@@ -125,78 +108,57 @@ setInterval(hora, 20000);
     prev.disabled = pagina === 0;
     next.disabled = pagina >= totalPaginas - 1;
 
-    /* ===== POSICIÓN ===== */
-
-    if(videos.length <= 2 || ultimaPaginaIndividual){
-
+    if(videos.length <= 2){
       track.style.transform = 'translateX(0)';
       return;
+    }
 
+    if(ultimaPaginaIndividual){
+
+      const ultimo = videos[videos.length - 1];
+      const viewport = track.parentElement;
+
+      const desplazamiento =
+        ultimo.offsetLeft -
+        (viewport.clientWidth - ultimo.getBoundingClientRect().width) / 2;
+
+      track.style.transform = `translateX(-${Math.max(0, desplazamiento)}px)`;
+
+      return;
     }
 
     const primerVideo = videos[pagina * videosPorPagina];
 
     if(primerVideo){
-
-      const desplazamiento = primerVideo.offsetLeft;
-
-      track.style.transform =
-        `translateX(-${desplazamiento}px)`;
-
+      track.style.transform = `translateX(-${primerVideo.offsetLeft}px)`;
     }
 
   }
 
-
-  /* ===== ANTERIOR ===== */
-
   prev.addEventListener('click', () => {
-
     if(pagina > 0){
-
       pagina--;
-
       actualizarCarrusel();
-
     }
-
   });
-
-
-  /* ===== SIGUIENTE ===== */
 
   next.addEventListener('click', () => {
-
-    const totalPaginas = Math.ceil(
-      videos.length / videosPorPagina
-    );
+    const totalPaginas = Math.ceil(videos.length / videosPorPagina);
 
     if(pagina < totalPaginas - 1){
-
       pagina++;
-
       actualizarCarrusel();
-
     }
-
   });
 
-
-  /* ===== RESPONSIVE ===== */
-
   window.addEventListener('resize', actualizarCarrusel);
-
-
-  /* ===== INICIAR ===== */
 
   actualizarCarrusel();
 
 })();
-
 /* =====================================================
    VAPOR GLASS MATE + REVELACIÓN CÓSMICA
 ===================================================== */
-
 if(!sinMovimiento){
 
   const caja = $('#burn');
@@ -227,7 +189,6 @@ if(!sinMovimiento){
 
     const d = Math.min(devicePixelRatio || 1, 1.5);
 
-
     /* ===== FOTOGRAFÍA ORIGINAL ===== */
 
     function dibujarFoto(ctx){
@@ -251,8 +212,6 @@ if(!sinMovimiento){
       );
 
     }
-
-
     function ajustar(){
 
       w = caja.clientWidth;
@@ -276,8 +235,6 @@ if(!sinMovimiento){
       iniciarAnimacion();
 
     }
-
-
     img.onload = () => {
       listo = true;
       ajustar();
@@ -339,8 +296,6 @@ if(!sinMovimiento){
       }
 
     }
-
-
     /* ===== DESPEJE LOCAL DEL CURSOR ===== */
 
     function despejar(px, py){
@@ -352,8 +307,6 @@ if(!sinMovimiento){
       });
 
     }
-
-
     /* ===== POLVO ESTELAR ===== */
 
     function emitir(px, py, cantidad = 8){
@@ -384,8 +337,6 @@ if(!sinMovimiento){
       }
 
     }
-
-
     /* ===== ESTRELLAS DE CUATRO PUNTAS ===== */
 
     function estrella(x, y, s){
@@ -405,8 +356,6 @@ if(!sinMovimiento){
       b.fill();
 
     }
-
-
     /* ===== MÁSCARA DE REVELACIÓN ===== */
 
     function dibujarMascara(ahora){
@@ -445,8 +394,6 @@ if(!sinMovimiento){
         m.fillRect(0, 0, w, h);
 
       }
-
-
       /* REVELACIÓN INDIVIDUAL DEL CURSOR */
 
       zonas.forEach(z => {
@@ -492,7 +439,6 @@ if(!sinMovimiento){
         m.arc(z.x, z.y, radio, 0, Math.PI * 2);
         m.fill();
 
-
         /* BORDES IRREGULARES */
 
         for(let i = 0; i < 3; i++){
@@ -524,8 +470,6 @@ if(!sinMovimiento){
       zonas = zonas.filter(z => ahora - z.t < 2400);
 
     }
-
-
     /* ===== PARTÍCULAS EN MOVIMIENTO ===== */
 
     function dibujarParticulas(ahora){
