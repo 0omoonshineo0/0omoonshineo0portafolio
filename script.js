@@ -16,11 +16,6 @@ setInterval(hora, 20000);
    CARRUSEL DE VIDEOS MOONSHINE
 ===================================================== */
 
-/* =====================================================
-   CARRUSEL DE VIDEOS MOONSHINE
-   VIDRIO CÓSMICO + DESEMPEÑADO + PARTÍCULAS
-===================================================== */
-
 (() => {
 
   const track = $('#videoTrack');
@@ -374,59 +369,69 @@ setInterval(hora, 20000);
 
       /* ===== SEGUIR EL CURSOR ===== */
 
-      function mover(event){
+     
+function mover(event){
 
-        if(event.pointerType !== 'mouse') return;
+  if(event.pointerType !== 'mouse') return;
 
-        const rect = card.getBoundingClientRect();
+  const rect = card.getBoundingClientRect();
 
-        const x = event.clientX - rect.left;
-        const y = event.clientY - rect.top;
+  const x = event.clientX - rect.left;
+  const y = event.clientY - rect.top;
 
-        const distancia = Math.hypot(x - lx, y - ly);
+  /* Primer movimiento: establecer el punto de inicio */
 
-        if(distancia > 1){
+  if(lx === -999 || ly === -999){
 
-          const pasos = Math.max(1, Math.ceil(distancia / 5));
+    lx = x;
+    ly = y;
 
-          for(let i = 0; i < pasos; i++){
+    zonas.push({
+      x,
+      y,
+      t:performance.now()
+    });
 
-            const t = (i + 1) / pasos;
+    emitir(x, y, 3);
+    iniciarAnimacion();
 
-            const px = lx + (x - lx) * t;
-            const py = ly + (y - ly) * t;
+    return;
 
-            zonas.push({
-              x:px,
-              y:py,
-              t:performance.now()
-            });
+  }
 
-            if(Math.random() < .8){
-              emitir(px, py, 2);
-            }
+  const distancia = Math.hypot(x - lx, y - ly);
 
-          }
+  if(distancia > 1){
 
-          lx = x;
-          ly = y;
+    const pasos = Math.max(1, Math.ceil(distancia / 5));
 
-          iniciarAnimacion();
+    for(let i = 0; i < pasos; i++){
 
-        }
+      const t = (i + 1) / pasos;
 
-      }
+      const px = lx + (x - lx) * t;
+      const py = ly + (y - ly) * t;
 
-
-      card.addEventListener('pointermove', mover);
-
-      card.addEventListener('pointerleave', () => {
-
-        lx = -999;
-        ly = -999;
-
+      zonas.push({
+        x:px,
+        y:py,
+        t:performance.now()
       });
 
+      if(Math.random() < .8){
+        emitir(px, py, 2);
+      }
+
+    }
+
+    lx = x;
+    ly = y;
+
+    iniciarAnimacion();
+
+  }
+
+}
 
       /* ===== TAMAÑO RESPONSIVE ===== */
 
