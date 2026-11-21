@@ -18,6 +18,7 @@ hora();
 setInterval(hora, 20000);
 
 
+
 /* =====================================================
    CARRUSEL DE VIDEOS MOONSHINE
 ===================================================== */
@@ -38,6 +39,8 @@ setInterval(hora, 20000);
   espacios.forEach((card, index) => {
 
     const id = (card.dataset.vimeo || '').trim();
+
+    card.classList.remove('is-centered');
 
     if(!id){
       card.hidden = true;
@@ -68,38 +71,61 @@ setInterval(hora, 20000);
   });
 
 
-  /* ===== NAVEGACIÓN POR PAREJAS ===== */
+  /* ===== ESTADO DEL CARRUSEL ===== */
 
   let pagina = 0;
 
+  const videosPorPagina = 2;
+
   function actualizarCarrusel(){
 
-    const totalPaginas = Math.ceil(videos.length / 2);
+    const totalPaginas = Math.ceil(
+      videos.length / videosPorPagina
+    );
+
+    /* Evitar páginas fuera de rango */
+
+    pagina = Math.max(
+      0,
+      Math.min(pagina, totalPaginas - 1)
+    );
+
+    /* Limpiar centrado anterior */
+
+    videos.forEach(video => {
+      video.classList.remove('is-centered');
+    });
+
+    const esUnico = videos.length === 1;
 
     const ultimaPaginaIndividual =
       videos.length > 2 &&
       videos.length % 2 !== 0 &&
       pagina === totalPaginas - 1;
 
-    track.classList.toggle(
-      'is-single',
-      videos.length === 1
-    );
+    track.classList.toggle('is-single', esUnico);
 
-    track.classList.toggle(
-      'is-last-single',
-      ultimaPaginaIndividual
-    );
+    /* ===== CENTRAR EL ÚLTIMO VIDEO SI QUEDA SOLO ===== */
 
-    /* Ocultar flechas cuando no hay más parejas */
+    if(ultimaPaginaIndividual){
 
-    prev.hidden = videos.length <= 2;
-    next.hidden = videos.length <= 2;
+      const ultimoVideo = videos[videos.length - 1];
+
+      ultimoVideo.classList.add('is-centered');
+
+    }
+
+    /* ===== FLECHAS ===== */
+
+    const mostrarFlechas = videos.length > 2;
+
+    prev.hidden = !mostrarFlechas;
+    next.hidden = !mostrarFlechas;
 
     prev.disabled = pagina === 0;
     next.disabled = pagina >= totalPaginas - 1;
 
-    /* Un solo video o última página individual */
+    /* ===== POSICIÓN ===== */
 
     if(videos.length <= 2 || ultimaPaginaIndividual){
 
@@ -108,9 +134,7 @@ setInterval(hora, 20000);
 
     }
 
-    /* Desplazar hasta la primera tarjeta de la pareja */
-
-    const primerVideo = videos[pagina * 2];
+    const primerVideo = videos[pagina * videosPorPagina];
 
     if(primerVideo){
 
@@ -124,13 +148,14 @@ setInterval(hora, 20000);
   }
 
 
-  /* ===== BOTÓN ANTERIOR ===== */
+  /* ===== ANTERIOR ===== */
 
   prev.addEventListener('click', () => {
 
     if(pagina > 0){
 
       pagina--;
+
       actualizarCarrusel();
 
     }
@@ -138,15 +163,18 @@ setInterval(hora, 20000);
   });
 
 
-  /* ===== BOTÓN SIGUIENTE ===== */
+  /* ===== SIGUIENTE ===== */
 
   next.addEventListener('click', () => {
 
-    const totalPaginas = Math.ceil(videos.length / 2);
+    const totalPaginas = Math.ceil(
+      videos.length / videosPorPagina
+    );
 
     if(pagina < totalPaginas - 1){
 
       pagina++;
+
       actualizarCarrusel();
 
     }
@@ -154,14 +182,16 @@ setInterval(hora, 20000);
   });
 
 
-  /* ===== AJUSTAR AL CAMBIAR EL TAMAÑO ===== */
+  /* ===== RESPONSIVE ===== */
 
   window.addEventListener('resize', actualizarCarrusel);
+
+
+  /* ===== INICIAR ===== */
 
   actualizarCarrusel();
 
 })();
-
 
 /* =====================================================
    VAPOR GLASS MATE + REVELACIÓN CÓSMICA
