@@ -1,24 +1,17 @@
 
 const $ = s => document.querySelector(s);
 const sinMovimiento = matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-
 /* =====================================================
    RELOJ
 ===================================================== */
-
 const reloj = $('#clock');
-
 const hora = () => {
   if(reloj){
     reloj.textContent = new Date().toTimeString().slice(0, 5);
   }
 };
-
 hora();
 setInterval(hora, 20000);
-
-
 /* =====================================================
    VIDEOS DE VIMEO
 ===================================================== */
@@ -32,12 +25,9 @@ document.querySelectorAll('.vid').forEach(v => {
   }
 
 });
-
-
 /* =====================================================
    VAPOR GLASS MATE + REVELACIÓN CÓSMICA
 ===================================================== */
-
 if(!sinMovimiento){
 
   const caja = $('#burn');
@@ -93,7 +83,6 @@ if(!sinMovimiento){
 
     }
 
-
     function ajustar(){
 
       w = caja.clientWidth;
@@ -117,7 +106,6 @@ if(!sinMovimiento){
       iniciarAnimacion();
 
     }
-
 
     img.onload = () => {
       listo = true;
@@ -181,7 +169,6 @@ if(!sinMovimiento){
 
     }
 
-
     /* ===== DESPEJE LOCAL DEL CURSOR ===== */
 
     function despejar(px, py){
@@ -193,7 +180,6 @@ if(!sinMovimiento){
       });
 
     }
-
 
     /* ===== POLVO ESTELAR ===== */
 
@@ -225,7 +211,6 @@ if(!sinMovimiento){
       }
 
     }
-
 
     /* ===== ESTRELLAS DE CUATRO PUNTAS ===== */
 
